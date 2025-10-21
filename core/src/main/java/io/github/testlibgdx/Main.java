@@ -8,6 +8,8 @@ public class Main extends ApplicationAdapter {
     public ObjectRenderer objectRenderer;
     public CubeFactory cubeFactory;
 
+    public SphereFactory sphere = new SphereFactory(0,0,10,40,40);
+
     @Override
     public void create() {
         objectRenderer = new ObjectRenderer();
@@ -18,7 +20,12 @@ public class Main extends ApplicationAdapter {
                 objectRenderer.add(cubeFactory.createCube(new Vector3(i, 1, j)));
             }
         }
+
+        //Sphere hovering above the origin
+        objectRenderer.add(sphere.createSphere());
+
     }
+
 
     @Override
     public void render() {
