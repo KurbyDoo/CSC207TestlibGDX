@@ -8,12 +8,13 @@ public class Main extends ApplicationAdapter {
     public ObjectRenderer objectRenderer;
     public CubeFactory cubeFactory;
 
-    public SphereFactory sphere = new SphereFactory(0,0,10,40,40);
+    public SphereFactory sphere;
 
     @Override
     public void create() {
         objectRenderer = new ObjectRenderer();
         cubeFactory = new CubeFactory();
+        sphere = new SphereFactory(0,0,10,40,40);
         // Create grid of cubes
         for (int i = -50; i <= 50; i++) {
             for (int j = -50; j <= 50; j++) {
@@ -36,5 +37,6 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         objectRenderer.dispose();
         cubeFactory.dispose();
+        sphere.dispose();
     }
 }

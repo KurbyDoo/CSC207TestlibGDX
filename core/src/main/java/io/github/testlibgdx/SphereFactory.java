@@ -12,13 +12,13 @@ import com.badlogic.gdx.utils.Disposable;
 
 public class SphereFactory implements Disposable {
 
-    private int divisionU = 10;
-    private int divisionV = 10;
-    private float width = 0;
-    private float height = 0;
-    private float depth = 0;
-    private final Material material = new Material(ColorAttribute.createDiffuse(Color.GREEN));
-    private final long attributes = VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal;
+    private int divisionU = 100;
+    private int divisionV = 100;
+    private float width = 10;
+    private float height = 10;
+    private float depth = 10;
+    private Material material;
+    private long attributes;
 
     Model model;
 
@@ -32,14 +32,10 @@ public class SphereFactory implements Disposable {
         this.depth = depth;
         this.divisionU = divisionU;
         this.divisionV = divisionV;
+        material =  new Material(ColorAttribute.createDiffuse(Color.GRAY));
+        attributes =  VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal;
         ModelBuilder modelBuilder = new ModelBuilder();
-        this.model = modelBuilder.createSphere(this.width,
-            this.height,
-            this.depth,
-            this.divisionU,
-            this.divisionV,
-            this.material,
-            this.attributes);
+        model = modelBuilder.createSphere(1f, 1f, 1f, 30, 30, material, attributes);
     }
 
     private void initModel() {
@@ -52,6 +48,8 @@ public class SphereFactory implements Disposable {
     }
 
     @Override
-    public void dispose(){this.model.dispose();}
+    public void dispose(){
+        this.model.dispose();
+    }
 
 }
