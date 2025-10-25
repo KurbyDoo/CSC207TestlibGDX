@@ -21,6 +21,7 @@ public class ObjectRenderer {
     public List<ModelInstance> models = new ArrayList<>();
 
     public CubeFactory cubeFactory;
+    public PyramidFactory pyramidFactory;
 
     public ObjectRenderer() {
         environment = new Environment();
