@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 public class Main extends ApplicationAdapter {
     public ObjectRenderer objectRenderer;
     public CubeFactory cubeFactory;
+    public PyramidFactory pyramidFactory;
 
     public SphereFactory sphere;
 
@@ -14,6 +15,7 @@ public class Main extends ApplicationAdapter {
     public void create() {
         objectRenderer = new ObjectRenderer();
         cubeFactory = new CubeFactory();
+        pyramidFactory = new PyramidFactory();
         sphere = new SphereFactory(0,0,10,40,40);
         // Create grid of cubes
         for (int i = -50; i <= 50; i++) {
@@ -24,6 +26,9 @@ public class Main extends ApplicationAdapter {
 
         //Sphere hovering above the origin
         objectRenderer.add(sphere.createSphere());
+
+        // Add a single pyramid in the center
+        objectRenderer.add(pyramidFactory.createPyramid(new Vector3(0, 3, 0)));
 
     }
 
@@ -38,5 +43,6 @@ public class Main extends ApplicationAdapter {
         objectRenderer.dispose();
         cubeFactory.dispose();
         sphere.dispose();
+        pyramidFactory.dispose();
     }
 }
