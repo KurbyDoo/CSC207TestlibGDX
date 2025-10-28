@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 
+
+// TODO: Similar to CubeFactory also currently useless
 public class CubeRender extends ModelInstance {
     private final Vector3 position = new Vector3();
     public CubeRender(Model model) {

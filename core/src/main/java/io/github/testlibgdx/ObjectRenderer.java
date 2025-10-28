@@ -24,7 +24,6 @@ public class ObjectRenderer {
     public FirstPersonCameraController cameraController;
     public ModelBatch modelBatch;
     public List<ModelInstance> models = new ArrayList<>();
-    public List<GameRenderable> renderables = new ArrayList<>();
 
     public BlockingQueue<ModelInstance> toAdd = new LinkedBlockingQueue<>();
 

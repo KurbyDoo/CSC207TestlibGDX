@@ -31,7 +31,7 @@ public class GameMeshBuilder {
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.begin();
         Material material = new Material(ColorAttribute.createDiffuse(Color.GRAY));
-        // TODO: Replace with texture aliasing
+        // TODO: Replace with texture aliasing see CubeRender
         MeshPartBuilder meshBuilder = modelBuilder.part("chunk", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal, material);
 
         for (int x = 0; x < Chunk.CHUNK_SIZE; x++) {
