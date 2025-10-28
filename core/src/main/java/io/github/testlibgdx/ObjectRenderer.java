@@ -1,5 +1,6 @@
 package io.github.testlibgdx;
 
+import Entity.PyramidFactory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -19,6 +20,7 @@ public class ObjectRenderer {
     public CameraInputController camController;
     public ModelBatch modelBatch;
     public List<ModelInstance> models = new ArrayList<>();
+    public List<GameRenderable> renderables = new ArrayList<>();
 
     public CubeFactory cubeFactory;
     public PyramidFactory pyramidFactory;
