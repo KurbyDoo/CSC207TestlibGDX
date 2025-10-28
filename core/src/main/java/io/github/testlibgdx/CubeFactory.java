@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 
+// TODO: This is currently a useless class
+// Later implement texture aliasing
 public class CubeFactory implements Disposable {
 //    Performance (e.g., bullets): UseObject Pooling.
 //    For the Future: Entity-Component-System with Ashley. Scalable pattern for building complex games.

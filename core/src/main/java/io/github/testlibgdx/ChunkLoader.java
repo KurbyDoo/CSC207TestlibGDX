@@ -2,20 +2,14 @@ package io.github.testlibgdx;
 
 import Entity.Chunk;
 import Entity.World;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 
-import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-
+// TODO: Eventually make this multithreaded
 public class ChunkLoader {
     private final World world;
     private final GameMeshBuilder meshBuilder;
     private final ObjectRenderer objectRenderer;
 
-    // Thread safe
-//    private volatile boolean running = true;
     public ChunkLoader(World world, GameMeshBuilder meshBuilder, ObjectRenderer objectRenderer) {
         this.world = world;
         this.meshBuilder = meshBuilder;
@@ -34,17 +28,4 @@ public class ChunkLoader {
             e.printStackTrace();
         }
     }
-
-//    @Override
-//    public void run() {
-//        while (running) {
-//            try {
-//                Chunk chunk = world.getChunksToLoad().take();
-//                final ModelInstance model = meshBuilder.build(chunk);
-//                objectRenderer.add(model);
-//            } catch (InterruptedException e) {
-//                running = false;
-//            }
-//        }
-//    }
 }

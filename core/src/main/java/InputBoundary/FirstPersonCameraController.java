@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
 
+// TODO: Reorganize to follow clean architecture
 public class FirstPersonCameraController extends InputAdapter {
     private final Camera camera;
     private final IntIntMap keys = new IntIntMap();

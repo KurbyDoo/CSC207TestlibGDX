@@ -18,6 +18,9 @@ public class World {
 
         int size = 16;
 
+        // Add chunks to render queue in a spiral patter
+        // TODO: Change to automatically add chunks closest to the player
+        // TODO: Add derendering when the player is too far
         for (int r = 0; r < size; r++) {
             for (int x = -r; x <= r; x++) {
                 for (int y = 0; y <= 16; y++) {

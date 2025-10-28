@@ -11,7 +11,6 @@ public class Chunk {
     }
 
     public void generate() {
-        // fill with stone;
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
                 double worldX = x + chunkX * CHUNK_SIZE;
