@@ -1,28 +1,28 @@
-package io.github.testlibgdx;
+package Entity;
 
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 
-public class Cube extends ModelInstance {
+public class Pyramid extends ModelInstance {
     private final Vector3 position = new Vector3();
-    public Cube(Model model) {
+
+    public Pyramid(Model model) {
         super(model);
     }
 
     public float getX() {
-        super.transform.getTranslation(position);
+        transform.getTranslation(position);
         return position.x;
     }
 
     public float getY() {
-        super.transform.getTranslation(position);
+        transform.getTranslation(position);
         return position.y;
     }
 
     public float getZ() {
-        super.transform.getTranslation(position);
+        transform.getTranslation(position);
         return position.z;
     }
-
 }
