@@ -3,19 +3,40 @@ package Entity;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class World {
     private HashMap<Vector3, Chunk> chunks;
 
+    private BlockingQueue<Chunk> chunksToLoad;
+
     public World() {
         chunks = new HashMap<>();
-        int size = 8;
+        chunksToLoad = new LinkedBlockingQueue<>();
 
-        for (int x = -size; x <= size; x++) {
-            for (int z = -size; z <= size; z++) {
+        int size = 16;
+
+        for (int r = 0; r < size; r++) {
+            for (int x = -r; x <= r; x++) {
+                for (int y = 0; y <= 16; y++) {
+                    addChunk(x, y, r);
+                }
+            }
+            for (int z = r - 1; z >= -r; z--) {
                 for (int y = 0; y <= size * 2; y++) {
-                    chunks.put(new Vector3(x, y, z), new Chunk(x, y, z));
-
+                    addChunk(r, y, z);
+                }
+            }
+            for (int x = r - 1; x >= -r; x--) {
+                for (int y = 0; y <= size * 2; y++) {
+                    addChunk(x, y, -r);
+                }
+            }
+            for (int z = -r + 1; z < r; z++) {
+                for (int y = 0; y <= size * 2; y++) {
+                    addChunk(-r, y, z);
                 }
             }
         }
@@ -26,5 +47,12 @@ public class World {
         return chunks;
     }
 
+    private void addChunk(int x, int y, int z) {
+        chunks.put(new Vector3(x, y, z), new Chunk(x, y, z));
+        chunksToLoad.add(chunks.get(new Vector3(x, y, z)));
+    }
 
+    public BlockingQueue<Chunk> getChunksToLoad() {
+        return chunksToLoad;
+    }
 }

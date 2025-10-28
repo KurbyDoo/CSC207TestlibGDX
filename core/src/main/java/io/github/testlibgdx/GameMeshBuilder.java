@@ -1,18 +1,21 @@
-package Entity;
+package io.github.testlibgdx;
 
+import Entity.BlockType;
+import Entity.Chunk;
+import Entity.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class GameMeshBuilder {
 
@@ -36,8 +39,6 @@ public class GameMeshBuilder {
                 for (int z = 0; z < Chunk.CHUNK_SIZE; z++) {
                     BlockType blockType = chunk.getBlock(x, y, z);
                     if (blockType == BlockType.AIR) continue;
-
-                    material = new Material(ColorAttribute.createDiffuse(new Color(0.5f, 0.5f, (float)y / Chunk.CHUNK_SIZE, 1.0f)));
 
                     float worldX = x + chunk.getChunkX() * Chunk.CHUNK_SIZE;
                     float worldY = y + chunk.getChunkY() * Chunk.CHUNK_SIZE;
@@ -106,8 +107,7 @@ public class GameMeshBuilder {
                 }
             }
         }
-        Model model = modelBuilder.end();
-        return new ModelInstance(model);
+        return new ModelInstance(modelBuilder.end());
     }
 
 }
