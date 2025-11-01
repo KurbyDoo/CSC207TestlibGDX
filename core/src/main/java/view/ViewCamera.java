@@ -8,7 +8,6 @@ public class ViewCamera extends PerspectiveCamera {
         super(80, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.near = 1f;
         this.far = 300f;
-        // Position and direction will be set by the CameraController.
         this.update();
     }
 }
