@@ -1,6 +1,6 @@
 package io.github.testlibgdx;
 
-import Entity.Chunk;
+import domain.entities.Chunk;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;

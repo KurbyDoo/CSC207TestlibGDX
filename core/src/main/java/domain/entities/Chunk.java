@@ -1,4 +1,4 @@
-package Entity;
+package domain.entities;
 
 public class Chunk {
     public static final int CHUNK_SIZE = 16;
@@ -8,21 +8,6 @@ public class Chunk {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.chunkY = chunkY;
-    }
-
-    public void generate() {
-        for (int x = 0; x < CHUNK_SIZE; x++) {
-            for (int z = 0; z < CHUNK_SIZE; z++) {
-                double worldX = x + chunkX * CHUNK_SIZE;
-                double worldZ = z + chunkZ * CHUNK_SIZE;
-                double perlinNoise = PerlinNoise.octavePerlin(worldX * 0.002, 0, worldZ * 0.002, 8, 0.5);
-                int height = (int)(perlinNoise * CHUNK_SIZE * CHUNK_SIZE);
-                for (int h = 0; h < CHUNK_SIZE; h++) {
-                    int worldY = h + chunkY * CHUNK_SIZE;
-                    blocks[x][h][z] = (worldY <= height) ? BlockType.STONE : BlockType.AIR;
-                }
-            }
-        }
     }
 
     public BlockType getBlock(int x, int y, int z) {

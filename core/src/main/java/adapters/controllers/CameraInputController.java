@@ -1,4 +1,4 @@
-package InputBoundary;
+package adapters.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,8 +7,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
 
-// TODO: Reorganize to follow clean architecture
-public class FirstPersonCameraController extends InputAdapter {
+public class CameraInputController extends InputAdapter {
     private final Camera camera;
     private final IntIntMap keys = new IntIntMap();
     private final Vector3 velocity = new Vector3();
@@ -16,7 +15,7 @@ public class FirstPersonCameraController extends InputAdapter {
     private final float sprintSpeed = movementSpeed * 5;
     private final float rotationSpeed = 0.2f;
 
-    public FirstPersonCameraController(Camera camera) {
+    public CameraInputController(Camera camera) {
         this.camera = camera;
     }
 

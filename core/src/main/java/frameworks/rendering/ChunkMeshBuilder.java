@@ -1,8 +1,7 @@
-package io.github.testlibgdx;
+package frameworks.rendering;
 
-import Entity.BlockType;
-import Entity.Chunk;
-import Entity.World;
+import domain.entities.BlockType;
+import domain.entities.Chunk;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -17,15 +16,7 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameMeshBuilder {
-
-    public List<ModelInstance> build(World world) {
-        List<ModelInstance> instances = new ArrayList<ModelInstance>();
-        for (Chunk chunk : world.getChunks().values()) {
-            instances.add(build(chunk));
-        }
-        return instances;
-    }
+public class ChunkMeshBuilder {
 
     public ModelInstance build(Chunk chunk) {
         ModelBuilder modelBuilder = new ModelBuilder();

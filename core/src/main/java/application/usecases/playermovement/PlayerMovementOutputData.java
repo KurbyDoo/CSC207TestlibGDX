@@ -1,4 +1,4 @@
-package UseCases.PlayerMovement;
+package application.usecases.playermovement;
 
 import com.badlogic.gdx.math.Vector3;
 

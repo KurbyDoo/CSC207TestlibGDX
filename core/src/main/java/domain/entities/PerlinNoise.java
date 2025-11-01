@@ -1,4 +1,4 @@
-package Entity;
+package domain.entities;
 
 import com.sun.tools.classfile.ConstantPool;
 

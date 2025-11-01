@@ -1,33 +1,41 @@
 package io.github.testlibgdx;
 
-import Entity.World;
+import adapters.controllers.ChunkLoadingController;
+import application.usecases.worldgeneration.WorldGenerationInteractor;
+import application.usecases.worldgeneration.WorldGenerationInputBoundary;
+import domain.entities.World;
+import frameworks.rendering.RenderPresenter;
+import frameworks.rendering.SceneRenderer;
 import com.badlogic.gdx.ApplicationAdapter;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
-    public ObjectRenderer objectRenderer;
-    public GameMeshBuilder meshBuilder;
-    public World world;
-
-    private ChunkLoader chunkLoader;
+    private SceneRenderer sceneRenderer;
+    private ChunkLoadingController chunkLoadingController;
 
     @Override
     public void create() {
-        // TODO: Organize into clean architecture
-        objectRenderer = new ObjectRenderer();
-        world = new World();
-        meshBuilder = new GameMeshBuilder();
-        chunkLoader = new ChunkLoader(world, meshBuilder, objectRenderer);
+        // Create domain entities
+        World world = new World();
+        
+        // Create use case interactors
+        WorldGenerationInputBoundary worldGenerator = new WorldGenerationInteractor();
+        
+        // Create framework components (presenters and renderers)
+        sceneRenderer = new SceneRenderer();
+        
+        // Create controllers that wire use cases with presenters
+        chunkLoadingController = new ChunkLoadingController(world, worldGenerator, sceneRenderer);
     }
 
     @Override
     public void render() {
-        chunkLoader.loadChunks();
-        objectRenderer.render();
+        chunkLoadingController.loadChunks();
+        sceneRenderer.render();
     }
 
     @Override
     public void dispose() {
-        objectRenderer.dispose();
+        sceneRenderer.dispose();
     }
 }

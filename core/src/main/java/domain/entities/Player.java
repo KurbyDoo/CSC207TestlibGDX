@@ -1,4 +1,4 @@
-package Entity;
+package domain.entities;
 
 import com.badlogic.gdx.math.Vector3;
 
