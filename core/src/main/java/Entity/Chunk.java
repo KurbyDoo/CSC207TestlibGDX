@@ -18,12 +18,12 @@ public class Chunk {
                     int worldX = x + chunkX * CHUNK_SIZE;
                     int worldZ = z + chunkZ * CHUNK_SIZE;
                     int worldY = h + chunkY * CHUNK_SIZE;
-                    double perlinNoise = PerlinNoise.octavePerlin(worldX * 0.005, 0, worldZ * 0.005, 6, 0.5);
-                    double perlinNoiseCave = PerlinNoise.octavePerlin(worldX * 0.01, worldY * 0.01, worldZ * 0.01, 4, 0.6);
-                    int height = (int)(perlinNoise * CHUNK_SIZE * CHUNK_SIZE);
+                    double perlinNoise = PerlinNoise.octavePerlin(worldX * 0.01, 0, worldZ * 0.01, 4, 0.5);
+                    double perlinNoiseCave = PerlinNoise.octavePerlin(worldX * 0.02, worldY * 0.02, worldZ * 0.02, 4, 0.6);
+                    int height = (int)(perlinNoise * CHUNK_SIZE * CHUNK_SIZE) / 4 + CHUNK_SIZE * CHUNK_SIZE / 2;
                     if (worldY > height) {
                         blocks[x][h][z] = BlockType.AIR;
-                    } else if (perlinNoiseCave > 0.6) {
+                    } else if (perlinNoiseCave > 0.65) {
                         blocks[x][h][z] = BlockType.AIR;
                     } else if (worldY == height) {
                         blocks[x][h][z] = BlockType.GRASS;
