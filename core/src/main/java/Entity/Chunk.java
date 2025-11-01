@@ -19,7 +19,15 @@ public class Chunk {
                 int height = (int)(perlinNoise * CHUNK_SIZE * CHUNK_SIZE);
                 for (int h = 0; h < CHUNK_SIZE; h++) {
                     int worldY = h + chunkY * CHUNK_SIZE;
-                    blocks[x][h][z] = (worldY <= height) ? BlockType.STONE : BlockType.AIR;
+                    if (worldY > height) {
+                        blocks[x][h][z] = BlockType.AIR;
+                    } else if (worldY == height) {
+                        blocks[x][h][z] = BlockType.GRASS;
+                    } else if (worldY > height - 3) {
+                        blocks[x][h][z] = BlockType.DIRT;
+                    } else {
+                        blocks[x][h][z] = BlockType.STONE;
+                    }
                 }
             }
         }
