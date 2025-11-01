@@ -16,7 +16,7 @@ public class World {
         chunks = new HashMap<>();
         chunksToLoad = new LinkedBlockingQueue<>();
 
-        int size = 16;
+        int size = 8;
 
         // Add chunks to render queue in a spiral patter
         // TODO: Change to automatically add chunks closest to the player
