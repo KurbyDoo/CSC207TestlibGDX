@@ -19,6 +19,6 @@ public class CameraController {
         camera.position.set(player.getPosition());
         camera.direction.set(player.getDirection());
         camera.up.set(player.getUp());
-        camera.update(); // This is crucial to apply the matrix changes.
+        camera.update();
     }
 }
