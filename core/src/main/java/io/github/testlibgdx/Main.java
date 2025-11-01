@@ -2,7 +2,7 @@ package io.github.testlibgdx;
 
 import Entity.World;
 import com.badlogic.gdx.ApplicationAdapter;
-git aimport view.ViewManager;
+import view.ViewManager;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
