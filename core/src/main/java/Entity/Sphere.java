@@ -1,6 +1,5 @@
-package io.github.testlibgdx;
+package Entity;
 
-import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 

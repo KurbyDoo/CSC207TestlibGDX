@@ -1,4 +1,4 @@
-package io.github.testlibgdx;
+package Entity;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes;

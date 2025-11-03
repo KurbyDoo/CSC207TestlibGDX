@@ -1,52 +1,39 @@
 package io.github.testlibgdx;
 
+import Entity.World;
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.math.Vector3;
+import view.ViewManager;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
-    public ObjectRenderer objectRenderer;
-    public CubeFactory cubeFactory;
-    public PyramidFactory pyramidFactory;
-    public SphereFactory sphere;
-    public CylinderFactory cylinderFactory;
+//    public ObjectRenderer objectRenderer;
+//    public GameMeshBuilder meshBuilder;
+//    public World world;
+//
+    public ViewManager viewManager;
+
+//    private ChunkLoader chunkLoader;
 
     @Override
     public void create() {
-        objectRenderer = new ObjectRenderer();
-        cubeFactory = new CubeFactory();
-        pyramidFactory = new PyramidFactory();
-        cylinderFactory = new CylinderFactory();
-        sphere = new SphereFactory(0,0,10,40,40);
-        // Create grid of cubes
-        for (int i = -50; i <= 50; i++) {
-            for (int j = -50; j <= 50; j++) {
-                objectRenderer.add(cubeFactory.createCube(new Vector3(i, 1, j)));
-            }
-        }
-
-        //Sphere hovering above the origin
-        objectRenderer.add(sphere.createSphere());
-
-        // Add a single pyramid in the center
-        objectRenderer.add(pyramidFactory.createPyramid(new Vector3(0, 3, 0)));
-
-        // Add a Cylinder
-        objectRenderer.add(cylinderFactory.createCylinder(new Vector3(0, 0, 0)));
+        viewManager = new ViewManager();
+        // TODO: Organize into clean architecture
+//        objectRenderer = new ObjectRenderer();
+//        world = new World();
+//        meshBuilder = new GameMeshBuilder();
+//        chunkLoader = new ChunkLoader(world, meshBuilder, objectRenderer);
     }
-
 
     @Override
     public void render() {
-        objectRenderer.render();
+        viewManager.render();
+        //        chunkLoader.loadChunks();
+//        objectRenderer.render();
     }
 
     @Override
     public void dispose() {
-        objectRenderer.dispose();
-        cubeFactory.dispose();
-        sphere.dispose();
-        pyramidFactory.dispose();
-        cylinderFactory.dispose();
+        viewManager.dispose();
+//        objectRenderer.dispose();
     }
 }

@@ -1,16 +1,18 @@
 package io.github.testlibgdx;
 
+import Entity.Chunk;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 
+// TODO: This is currently a useless class
+// Later implement texture aliasing
 public class CubeFactory implements Disposable {
 //    Performance (e.g., bullets): UseObject Pooling.
 //    For the Future: Entity-Component-System with Ashley. Scalable pattern for building complex games.
@@ -38,13 +40,14 @@ public class CubeFactory implements Disposable {
         return newMaterial;
     }
 
-    public Cube createCube(Vector3 position) {
-        Cube cube = new Cube(unitCubeModel);
+    public CubeRender createCube(Vector3 position) {
+        CubeRender cube = new CubeRender(unitCubeModel);
         cube.transform.setTranslation(position);
 
         cube.materials.get(0).set(getMaterial(position.len() < 25 ? position.len() < 23 ? Color.GREEN : Color.YELLOW : Color.BLUE));
         return cube;
     }
+
 
     @Override
     public void dispose() {
