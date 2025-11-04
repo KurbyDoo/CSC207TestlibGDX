@@ -44,14 +44,15 @@ public class Player {
     }
 
     public Vector3 getPosition() {
-        return position;
+        return new Vector3(position);
     }
 
+
     public Vector3 getDirection() {
-        return direction;
+        return new Vector3(direction);
     }
 
     public Vector3 getUp() {
-        return up;
+        return new Vector3(up);
     }
 }

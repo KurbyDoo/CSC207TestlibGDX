@@ -2,23 +2,37 @@ package InputBoundary;
 
 import Entity.Player;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector3;
 
 public class CameraController {
     private final Camera camera;
     private final Player player;
 
+    private final Vector3 previousPosition;
+    private final Vector3 previousDirection;
+    private final Vector3 previousUp;
+
+
     public CameraController(Camera camera, Player player) {
         this.camera = camera;
         this.player = player;
+
+        previousPosition = new Vector3();
+        previousDirection = new Vector3();
+        previousUp = new Vector3();
     }
 
-    /**
-     * Reads the state from the Player entity and applies it to the LibGDX Camera.
-     */
-    public void updateCamera() {
-        camera.position.set(player.getPosition());
-        camera.direction.set(player.getDirection());
-        camera.up.set(player.getUp());
+    public void updatePrevious() {
+        previousPosition.set(player.getPosition());
+        previousDirection.set(player.getDirection());
+        previousUp.set(player.getUp());
+    }
+
+
+    public void renderCamera(float alpha) {
+        camera.position.set(previousPosition.lerp(player.getPosition(), alpha));
+        camera.direction.set(previousDirection.lerp(player.getDirection(), alpha));
+        camera.up.set(previousUp.lerp(player.getUp(), alpha));
         camera.update();
     }
 }

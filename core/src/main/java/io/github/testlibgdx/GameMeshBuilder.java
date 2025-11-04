@@ -44,6 +44,12 @@ public class GameMeshBuilder {
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.begin();
 
+        // SKIP GENERATING ALL UNDERGROUND CHUNKS
+        // TODO: This is a temporary solution, later update terrain generator to never add chunks that are underground
+        if (chunk.getIsUnderground()) {
+            return new ModelInstance(modelBuilder.end());
+        }
+
         // --- Pass 1: Build all GRASS blocks ---
         Material grassMaterial = new Material(ColorAttribute.createDiffuse(getBlockColor(BlockType.GRASS)));
         MeshPartBuilder meshBuilder = modelBuilder.part("grass", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal, grassMaterial);

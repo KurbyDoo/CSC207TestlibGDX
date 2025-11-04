@@ -14,6 +14,9 @@ import io.github.testlibgdx.GameMeshBuilder;
 import io.github.testlibgdx.ObjectRenderer;
 
 public class GameView implements Viewable {
+    private final float FPS = 120.0f;
+    private final float TIME_STEP = 1.0f / FPS;
+
     public ObjectRenderer objectRenderer;
     public GameMeshBuilder meshBuilder;
     public World world;
@@ -22,6 +25,8 @@ public class GameView implements Viewable {
     private ViewCamera camera;
     private ChunkLoader chunkLoader;
     private Player player;
+
+    private float accumulator;
 
     @Override
     public void createView() {
@@ -47,12 +52,23 @@ public class GameView implements Viewable {
     @Override
     public void renderView() {
         float deltaTime = Gdx.graphics.getDeltaTime();
+        accumulator += deltaTime;
 
-        gameInputAdapter.processInput(deltaTime);
+        while (accumulator >= TIME_STEP) {
+            accumulator -= TIME_STEP;
+            cameraController.updatePrevious();
 
-        cameraController.updateCamera();
+            // WORLD UPDATES
+            gameInputAdapter.processInput(deltaTime);
+        }
 
+        // BACKGROUND PROCESSING
         chunkLoader.loadChunks();
+
+        float alpha = accumulator / TIME_STEP;
+
+        // RENDER UPDATES
+        cameraController.renderCamera(alpha);
         objectRenderer.render();
     }
 
