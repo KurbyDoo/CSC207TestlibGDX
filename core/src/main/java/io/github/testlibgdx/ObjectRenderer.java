@@ -53,6 +53,10 @@ public class ObjectRenderer {
         toAdd.add(modelInstance);
     }
 
+    public void remove(ModelInstance modelInstance) {
+        models.remove(modelInstance);
+    }
+
     private void updateRenderList() {
         ModelInstance instance;
         while ((instance = toAdd.poll()) != null) {

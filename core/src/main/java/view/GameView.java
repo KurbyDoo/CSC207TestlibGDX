@@ -7,6 +7,7 @@ import InputBoundary.FirstPersonCameraController;
 import InputBoundary.GameInputAdapter;
 import UseCases.PlayerMovement.PlayerMovementInputBoundary;
 import UseCases.PlayerMovement.PlayerMovementInteractor;
+import UseCases.WorldManagement.ChunkStreamingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import io.github.testlibgdx.ChunkLoader;
@@ -22,6 +23,8 @@ public class GameView implements Viewable {
     private ViewCamera camera;
     private ChunkLoader chunkLoader;
     private Player player;
+    private ChunkStreamingSystem streamingSystem;
+
 
     @Override
     public void createView() {
@@ -42,6 +45,9 @@ public class GameView implements Viewable {
         world = new World();
         meshBuilder = new GameMeshBuilder();
         chunkLoader = new ChunkLoader(world, meshBuilder, objectRenderer);
+        int renderDistance = 3; // how many chunks out to load
+        streamingSystem = new ChunkStreamingSystem(world, chunkLoader, renderDistance);
+
     }
 
     @Override
@@ -53,6 +59,10 @@ public class GameView implements Viewable {
         cameraController.updateCamera();
 
         chunkLoader.loadChunks();
+
+        chunkLoader.unloadChunks(player.getPosition());
+
+        // 4️⃣ Render all loaded models
         objectRenderer.render();
     }
 

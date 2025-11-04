@@ -30,4 +30,13 @@ public class ChunkLoader {
             e.printStackTrace();
         }
     }
+
+    public void unloadChunk(Chunk chunk, ModelInstance model) {
+        objectRenderer.remove(model);
+    }
+
+    // NEW: Expose a method to safely build a chunk model
+    public ModelInstance buildChunkModel(Chunk chunk) {
+        return meshBuilder.build(chunk);
+    }
 }

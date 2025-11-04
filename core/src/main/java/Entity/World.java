@@ -8,7 +8,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class World {
-    private HashMap<Vector3, Chunk> chunks;
+    private HashMap<ChunkPosition, Chunk> chunks;
 
     private BlockingQueue<Chunk> chunksToLoad;
 
@@ -46,14 +46,27 @@ public class World {
     }
 
 
-    public HashMap<Vector3, Chunk> getChunks() {
+    public HashMap<ChunkPosition, Chunk> getChunks() {
         return chunks;
     }
+
+
+    public Chunk getOrCreateChunk(int chunkX, int chunkY, int chunkZ) {
+        Vector3 key = new Vector3(chunkX, chunkY, chunkZ);
+        if (!chunks.containsKey(key)) {
+            Chunk newChunk = new Chunk(chunkX, chunkY, chunkZ);
+            chunks.put(key, newChunk);
+            chunksToLoad.add(newChunk);
+        }
+        return chunks.get(key);
+    }
+
 
     private void addChunk(int x, int y, int z) {
         chunks.put(new Vector3(x, y, z), new Chunk(x, y, z));
         chunksToLoad.add(chunks.get(new Vector3(x, y, z)));
     }
+
 
     public BlockingQueue<Chunk> getChunksToLoad() {
         return chunksToLoad;
