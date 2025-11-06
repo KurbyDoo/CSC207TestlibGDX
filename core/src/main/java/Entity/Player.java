@@ -38,9 +38,15 @@ public class Player {
         // Yaw (left/right) - Rotate around the world UP vector.
         direction.rotate(up, -deltaX * rotationSpeed);
 
-        // Pitch (up/down) - Rotate around the player's local RIGHT vector.
-        Vector3 pitchAxis = new Vector3(direction).crs(up).nor();
-        direction.rotate(pitchAxis, deltaY * rotationSpeed);
+        float maxPitchRadians = (float) Math.toRadians(89.9f);
+        float newPitchRadians = (float) Math.asin(direction.y) + (float) Math.toRadians(deltaY * rotationSpeed);
+        float clampedPitchRadians = Math.max(-maxPitchRadians, Math.min(maxPitchRadians, newPitchRadians));
+        float actualRotationRadians = clampedPitchRadians - (float) Math.asin(direction.y);
+
+        if (Math.abs(actualRotationRadians) > 0.0001f) {
+            Vector3 pitchAxis = new Vector3(direction).crs(up).nor();
+            direction.rotate(pitchAxis, (float) Math.toDegrees(actualRotationRadians));
+        }
     }
 
     public Vector3 getPosition() {
