@@ -16,20 +16,17 @@ public class ChunkLoader {
 
     private final int BUFFER_SIZE = 32;
 
-    public ChunkLoader(GameMeshBuilder meshBuilder, ObjectRenderer objectRenderer) {
+    public ChunkLoader(World world, GameMeshBuilder meshBuilder, ObjectRenderer objectRenderer) {
+        this.world = world;
         this.meshBuilder = meshBuilder;
         this.objectRenderer = objectRenderer;
-        chunksToLoad = new LinkedBlockingQueue<>();
-    }
-
-    public void addChunkToLoad(Chunk chunk) {
-        chunksToLoad.add(chunk);
     }
 
     public void loadChunks() {
         try {
             Chunk chunk;
-            for (int i = 0; i < BUFFER_SIZE && ((chunk = chunksToLoad.poll()) != null); i++) {
+            for (int i = 0; i < BUFFER_SIZE && ((chunk = world.getChunksToLoad().poll()) != null); i++) {
+                chunk.generate();
                 final ModelInstance model = meshBuilder.build(chunk);
                 objectRenderer.add(model);
             }
