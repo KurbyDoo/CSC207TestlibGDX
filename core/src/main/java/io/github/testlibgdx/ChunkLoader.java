@@ -9,7 +9,6 @@ public class ChunkLoader {
     private final World world;
     private final GameMeshBuilder meshBuilder;
     private final ObjectRenderer objectRenderer;
-
     private final int BUFFER_SIZE = 8;
 
     public ChunkLoader(World world, GameMeshBuilder meshBuilder, ObjectRenderer objectRenderer) {
