@@ -10,7 +10,7 @@ public class ChunkLoader {
     private final GameMeshBuilder meshBuilder;
     private final ObjectRenderer objectRenderer;
 
-    private final int BUFFER_SIZE = 8;
+    private final int BUFFER_SIZE = 32;
 
     public ChunkLoader(World world, GameMeshBuilder meshBuilder, ObjectRenderer objectRenderer) {
         this.world = world;
@@ -22,7 +22,7 @@ public class ChunkLoader {
         try {
             Chunk chunk;
             for (int i = 0; i < BUFFER_SIZE && ((chunk = world.getChunksToLoad().poll()) != null); i++) {
-                chunk.generate();
+//                chunk.generate();
                 final ModelInstance model = meshBuilder.build(chunk);
                 objectRenderer.add(model);
             }

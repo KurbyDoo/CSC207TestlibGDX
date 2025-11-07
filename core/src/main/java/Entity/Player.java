@@ -7,8 +7,8 @@ public class Player {
     private final Vector3 direction;
     private final Vector3 up;
 
-    private final float movementSpeed = 10.0f;
-    private final float sprintSpeed = movementSpeed * 5;
+    private final float movementSpeed = 1.0f;
+    private final float sprintSpeed = movementSpeed * 50;
     private final float rotationSpeed = 0.2f;
 
     private final Inventory inventory;
@@ -43,7 +43,7 @@ public class Player {
         // Yaw (left/right) - Rotate around the world UP vector.
         direction.rotate(up, -deltaX * rotationSpeed);
 
-        float maxPitchRadians = (float) Math.toRadians(89.9f);
+        float maxPitchRadians = (float) Math.toRadians(89.0f);
         float newPitchRadians = (float) Math.asin(direction.y) + (float) Math.toRadians(deltaY * rotationSpeed);
         float clampedPitchRadians = Math.max(-maxPitchRadians, Math.min(maxPitchRadians, newPitchRadians));
         float actualRotationRadians = clampedPitchRadians - (float) Math.asin(direction.y);

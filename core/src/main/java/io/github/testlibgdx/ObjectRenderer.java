@@ -21,17 +21,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class ObjectRenderer {
     public Environment environment;
-//    public PerspectiveCamera cam;
-//    public CameraInputController camController;
+
     public PerspectiveCamera camera;
-    public FirstPersonCameraController cameraController;
     public ModelBatch modelBatch;
     public List<ModelInstance> models = new ArrayList<>();
 
     public BlockingQueue<ModelInstance> toAdd = new LinkedBlockingQueue<>();
-
-    public CubeFactory cubeFactory;
-    public PyramidFactory pyramidFactory;
 
     public ObjectRenderer(PerspectiveCamera camera) {
         environment = new Environment();
@@ -41,12 +36,6 @@ public class ObjectRenderer {
         modelBatch = new ModelBatch();
 
         this.camera = camera;
-
-        // Camera Controller
-//        camController = new CameraInputController(cam);
-//        cameraController = new FirstPersonCameraController(camera);
-//        Gdx.input.setInputProcessor(cameraController);
-//        Gdx.input.setCursorCatched(true);
     }
 
     public void add(ModelInstance modelInstance) {
