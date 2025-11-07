@@ -18,6 +18,9 @@ import java.util.List;
 
 public class GameMeshBuilder {
 
+    ModelBuilder modelBuilder;
+    ModelInstance modelInstance;
+
     public List<ModelInstance> build(World world) {
         List<ModelInstance> instances = new ArrayList<ModelInstance>();
         for (Chunk chunk : world.getChunks().values()) {
