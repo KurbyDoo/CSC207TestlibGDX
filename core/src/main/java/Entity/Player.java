@@ -11,10 +11,14 @@ public class Player {
     private final float sprintSpeed = movementSpeed * 5;
     private final float rotationSpeed = 0.2f;
 
+    private final Inventory inventory;
+
     public Player(Vector3 startingPosition) {
         this.position = new Vector3(startingPosition);
         this.direction = new Vector3(0, 0, -1);
         this.up = new Vector3(Vector3.Y);
+
+        this.inventory = new Inventory();
     }
 
     /**
@@ -60,5 +64,26 @@ public class Player {
 
     public Vector3 getUp() {
         return new Vector3(up);
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    /**
+     * Picks up the specified item and adds it to the player's inventory.
+     * @param item The item to be picked up.
+     */
+    public void pickUp(Item item) {
+        inventory.addItem(item);
+    }
+
+    /**
+     * Attempts to drop the specified item from the player's inventory.
+     * @param item The item to be dropped.
+     * @return True if player had at least one of the specified item, and it was successfully removed; false otherwise.
+     */
+    public boolean drop(Item item) {
+        return inventory.removeItem(item);
     }
 }
