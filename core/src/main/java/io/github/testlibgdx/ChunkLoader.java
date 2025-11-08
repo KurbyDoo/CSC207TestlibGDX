@@ -3,6 +3,9 @@ package io.github.testlibgdx;
 import Entity.Chunk;
 import Entity.World;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
+import com.badlogic.gdx.utils.ArrayMap;
 
 // TODO: Eventually make this multithreaded
 public class ChunkLoader {
@@ -10,6 +13,10 @@ public class ChunkLoader {
     private final GameMeshBuilder meshBuilder;
     private final ObjectRenderer objectRenderer;
     private final int BUFFER_SIZE = 8;
+
+    private HashMap<String, GameObject.Constructor> constructor = new HashMap<>(tring.class, GameObject.Constrctor.class);
+
+    private ArrayList<GameObject.Constructor> constructor2;
 
     public ChunkLoader(World world, GameMeshBuilder meshBuilder, ObjectRenderer objectRenderer) {
         this.world = world;
@@ -23,6 +30,7 @@ public class ChunkLoader {
             for (int i = 0; i < BUFFER_SIZE && ((chunk = world.getChunksToLoad().poll()) != null); i++) {
                 chunk.generate();
                 final ModelInstance model = meshBuilder.build(chunk);
+
                 objectRenderer.add(model);
             }
         } catch (Exception e) {

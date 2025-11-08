@@ -6,11 +6,13 @@ import Entity.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.*;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.List;
 
 public class GameMeshBuilder {
 
+    ArrayList<GameObject.Constructor> constructor = null;
     ModelBuilder modelBuilder;
     ModelInstance modelInstance;
 
@@ -94,8 +97,15 @@ public class GameMeshBuilder {
             }
         }
 
-        return new ModelInstance(modelBuilder.end());
+        Model completeModel = modelBuilder.end();
+
+        constructor.put(new GameObject(completeModel,"ground",
+            new btBoxShape(new Vector3(chunk.getChunkX(),chunk.getChunkY(),chunk.getChunkZ()))));
+
+        return new ModelInstance((completeModel));
     }
+
+    public ArrayList<GameObject.Constructor> getConstructor(){return constructor;}
 
     private void buildBlockFaces(MeshPartBuilder meshBuilder, Chunk chunk, int x, int y, int z) {
         int worldX = x + chunk.getChunkX() * Chunk.CHUNK_SIZE;
