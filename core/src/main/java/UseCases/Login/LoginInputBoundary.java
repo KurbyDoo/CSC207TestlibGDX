@@ -1,4 +1,5 @@
 package UseCases.Login;
 
-public class LoginInputBoundary {
+public interface LoginInputBoundary {
+    void login(String useremail, String password);
 }
