@@ -7,14 +7,15 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.utils.ArrayMap;
 
+import java.util.ArrayList;
+
 // TODO: Eventually make this multithreaded
 public class ChunkLoader {
     private final World world;
     private final GameMeshBuilder meshBuilder;
     private final ObjectRenderer objectRenderer;
     private final int BUFFER_SIZE = 8;
-
-    private HashMap<String, GameObject.Constructor> constructor = new HashMap<>(tring.class, GameObject.Constrctor.class);
+    // private HashMap<String, GameObject.Constructor> constructor = new HashMap<>(tring.class, GameObject.Constrctor.class);
 
     private ArrayList<GameObject.Constructor> constructor2;
 
@@ -30,7 +31,7 @@ public class ChunkLoader {
             for (int i = 0; i < BUFFER_SIZE && ((chunk = world.getChunksToLoad().poll()) != null); i++) {
                 chunk.generate();
                 final ModelInstance model = meshBuilder.build(chunk);
-
+             //   ArrayList<GameObject.Constructor> collisionBlocks = meshBuilder.getCollisionConstructor();
                 objectRenderer.add(model);
             }
         } catch (Exception e) {

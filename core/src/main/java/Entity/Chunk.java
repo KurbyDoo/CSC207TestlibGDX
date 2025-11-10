@@ -4,7 +4,7 @@ public class Chunk {
     public static final int CHUNK_SIZE = 16;
     private static boolean enableCaves = false;
 
-    private BlockType[][][] blocks = new BlockType[CHUNK_SIZE][CHUNK_SIZE][CHUNK    _SIZE];
+    private BlockType[][][] blocks = new BlockType[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
     private final int chunkX, chunkY, chunkZ;
     private boolean isUnderground;
     public Chunk(int chunkX, int chunkY, int chunkZ) {
