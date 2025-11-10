@@ -20,7 +20,8 @@ import java.util.List;
 
 public class GameMeshBuilder {
 
-    ArrayList<GameObject.Constructor> constructor = null;
+    btTriangleMesh triangleMesh = new btTriangleMesh();
+    ArrayList<GameObject.Constructor> collisionConstructor = null;
     ModelBuilder modelBuilder;
     ModelInstance modelInstance;
 
@@ -64,6 +65,8 @@ public class GameMeshBuilder {
                 for (int z = 0; z < Chunk.CHUNK_SIZE; z++) {
                     if (chunk.getBlock(x, y, z) == BlockType.GRASS) {
                         buildBlockFaces(meshBuilder, chunk, x, y, z);
+//                        collisionConstructor.add(new GameObject(completeModel,"ground",
+//                            new btBoxShape(new Vector3(chunk.getChunkX(),chunk.getChunkY(),chunk.getChunkZ()))));
                     }
                 }
             }
@@ -99,13 +102,11 @@ public class GameMeshBuilder {
 
         Model completeModel = modelBuilder.end();
 
-        constructor.put(new GameObject(completeModel,"ground",
-            new btBoxShape(new Vector3(chunk.getChunkX(),chunk.getChunkY(),chunk.getChunkZ()))));
 
         return new ModelInstance((completeModel));
     }
 
-    public ArrayList<GameObject.Constructor> getConstructor(){return constructor;}
+    public ArrayList<GameObject.Constructor> getCollisionConstructor(){return collisionConstructor;}
 
     private void buildBlockFaces(MeshPartBuilder meshBuilder, Chunk chunk, int x, int y, int z) {
         int worldX = x + chunk.getChunkX() * Chunk.CHUNK_SIZE;
@@ -120,6 +121,9 @@ public class GameMeshBuilder {
                     worldX + 1, worldY + 1, worldZ,
                     worldX, worldY + 1, worldZ,
                     0, 1, 0);
+
+            triangleMesh.addTriangle();
+
         }
         // Bottom face (y-)
         if (y == 0 || chunk.getBlock(x, y - 1, z) == BlockType.AIR) {
