@@ -1,7 +1,7 @@
 package io.github.testlibgdx;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import view.ViewManager;
+import presentation.view.ViewManager;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
