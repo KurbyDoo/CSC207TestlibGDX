@@ -11,10 +11,15 @@ public class Player {
     private final float sprintSpeed = movementSpeed * 5;
     private final float rotationSpeed = 0.2f;
 
+    private final Inventory inventory;
+    private int currSlot = 0;
+
     public Player(Vector3 startingPosition) {
         this.position = new Vector3(startingPosition);
         this.direction = new Vector3(0, 0, -1);
         this.up = new Vector3(Vector3.Y);
+
+        this.inventory = new Inventory();
     }
 
     /**
@@ -60,5 +65,40 @@ public class Player {
 
     public Vector3 getUp() {
         return new Vector3(up);
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public int getCurrSlot() {
+        return currSlot;
+    }
+
+    /**
+     * Set the current selected inventory slot.
+     * @param index The index of the selected inventory slot.
+     */
+    public void setCurrSlot(int index) {
+        if (index >= 0 && index < inventory.getSize()) {
+            this.currSlot = index;
+        }
+    }
+
+    /**
+     * Picks up the specified item and adds it to the player's inventory.
+     * Do nothing if inventory is full.
+     * @param item The item to be picked up.
+     */
+    public void pickUp(Item item) {
+        inventory.addItem(item);
+    }
+
+    /**
+     * Drops an item from the inventory slot that the player is holding.
+     * Do nothing if slot is empty.
+     */
+    public void drop() {
+        inventory.removeItem(currSlot);
     }
 }
