@@ -12,6 +12,7 @@ public class Player {
     private final float rotationSpeed = 0.2f;
 
     private final Inventory inventory;
+    private int currSlot = 0;
 
     public Player(Vector3 startingPosition) {
         this.position = new Vector3(startingPosition);
@@ -70,8 +71,23 @@ public class Player {
         return inventory;
     }
 
+    public int getCurrSlot() {
+        return currSlot;
+    }
+
+    /**
+     * Set the current selected inventory slot.
+     * @param index The index of the selected inventory slot.
+     */
+    public void setCurrSlot(int index) {
+        if (index >= 0 && index < inventory.getSize()) {
+            this.currSlot = index;
+        }
+    }
+
     /**
      * Picks up the specified item and adds it to the player's inventory.
+     * Do nothing if inventory is full.
      * @param item The item to be picked up.
      */
     public void pickUp(Item item) {
@@ -79,11 +95,10 @@ public class Player {
     }
 
     /**
-     * Attempts to drop the specified item from the player's inventory.
-     * @param item The item to be dropped.
-     * @return True if player had at least one of the specified item, and it was successfully removed; false otherwise.
+     * Drops an item from the inventory slot that the player is holding.
+     * Do nothing if slot is empty.
      */
-    public boolean drop(Item item) {
-        return inventory.removeItem(item);
+    public void drop() {
+        inventory.removeItem(currSlot);
     }
 }

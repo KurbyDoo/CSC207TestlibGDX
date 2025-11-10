@@ -6,10 +6,19 @@ public class Item {
 
     private final String id;
     private final String displayName;
+    private final boolean stackable;
 
-    public Item(String id, String displayName) {
+    public Item(String id, String displayName, boolean stackable) {
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("Item ID must not be empty");
+        }
+        if (displayName == null || displayName.isEmpty()) {
+            throw new IllegalArgumentException("Display name must not be empty");
+        }
+
         this.id = id;
         this.displayName = displayName;
+        this.stackable = stackable;
     }
 
     public String getId() {
@@ -18,6 +27,10 @@ public class Item {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public boolean isStackable() {
+        return stackable;
     }
 
     /**

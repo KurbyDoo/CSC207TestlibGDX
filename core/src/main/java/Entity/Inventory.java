@@ -1,31 +1,39 @@
 package Entity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class Inventory {
 
-    private final List<InventorySlot> slots = new ArrayList<>();
+    public static final int MAX_SLOTS = 20;
+    private final InventorySlot[] slots = new InventorySlot[MAX_SLOTS];
 
     public Inventory() {
-        slots.add(new InventorySlot());
+        for (int i = 0; i < MAX_SLOTS; i++) {
+            slots[i] = new InventorySlot();
+        }
     }
 
-    /** for debugging purposes */
-    public List<InventorySlot> getSlots() {
-        return Collections.unmodifiableList(slots);
+    public int getSize() {
+        return MAX_SLOTS;
+    }
+
+    public InventorySlot getSlot(int index) {
+        if (index < 0 || index >= MAX_SLOTS) {
+            throw new IndexOutOfBoundsException("Invalid slot index: " + index);
+        }
+        return slots[index];
     }
 
     /**
      * Adds the specified item to the inventory.
+     * Do nothing if inventory is full.
      * @param item The item to add to the inventory.
      */
     public void addItem(Item item) {
-        for (InventorySlot slot : slots) {
-            if (slot.canStack(item)) {
-                slot.addOne(item);
-                return;
+        if (item.isStackable()) {
+            for (InventorySlot slot : slots) {
+                if (!slot.isEmpty() && slot.getItem().equals(item)) {
+                    slot.addOne(item);
+                    return;
+                }
             }
         }
 
@@ -35,39 +43,18 @@ public class Inventory {
                 return;
             }
         }
-
-        InventorySlot newSlot = new InventorySlot();
-        newSlot.addOne(item);
-        slots.add(newSlot);
     }
 
     /**
-     * Removes one instance of the specified item from the inventory.
-     * @param item The item to remove.
-     * @return True if one instance of the item was successfully removed; false otherwise.
+     * Removes one instance of the item from the specified inventory slot.
+     * Do nothing if the slot is empty.
+     * @param slotIndex The index of the inventory slot.
      */
-    public boolean removeItem(Item item) {
-        for (InventorySlot slot : slots) {
-            if (slot.removeOne(item)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    public void removeItem(int slotIndex) {
+        if (slotIndex < 0 || slotIndex >= MAX_SLOTS) return;
 
-    /**
-     * Counts the total number of instances of the specified item in the inventory.
-     * @param item The item to count.
-     * @return The total quantity of the specified item across slots.
-     */
-    public int countItem(Item item) {
-        int total = 0;
-        for (InventorySlot slot : slots) {
-            if (!slot.isEmpty() && item.equals(slot.getItem())) {
-                total += slot.getQuantity();
-            }
-        }
-        return total;
+        InventorySlot slot = slots[slotIndex];
+        slot.removeOne();
     }
 }
 
