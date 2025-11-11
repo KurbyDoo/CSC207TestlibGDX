@@ -1,5 +1,6 @@
 package io.github.testlibgdx;
 
+import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import domain.entities.Chunk;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
@@ -39,8 +40,9 @@ public class ChunkLoader {
             Chunk chunk;
             for (int i = 0; i < BUFFER_SIZE && ((chunk = chunksToLoad.poll()) != null); i++) {
                 final ModelInstance model = meshBuilder.build(chunk);
-             //   ArrayList<GameObject.Constructor> collisionBlocks = meshBuilder.getCollisionConstructor();
+                btBvhTriangleMeshShape triMesh = meshBuilder.buildTriangle();
                 objectRenderer.add(model);
+                objectRenderer.collisionAssets(triMesh);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.bullet.collision.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class GameMeshBuilder {
     private final World world;
@@ -24,7 +25,6 @@ public class GameMeshBuilder {
     }
 
     btTriangleMesh triangleMesh = new btTriangleMesh();
-    ArrayList<GameObject.Constructor> collisionConstructor = null;
     ModelBuilder modelBuilder;
     ModelInstance modelInstance;
 
@@ -69,15 +69,12 @@ public class GameMeshBuilder {
                 for (int z = 0; z < Chunk.CHUNK_SIZE; z++) {
                     if (chunk.getBlock(x, y, z) == type) {
                         buildBlockFaces(meshBuilder, chunk, x, y, z);
-//                        collisionConstructor.add(new GameObject(completeModel,"ground",
-//                            new btBoxShape(new Vector3(chunk.getChunkX(),chunk.getChunkY(),chunk.getChunkZ()))));
                     }
                 }
             }
         }
     }
 
-    public ArrayList<GameObject.Constructor> getCollisionConstructor(){return collisionConstructor;}
 
     private void buildBlockFaces(MeshPartBuilder meshBuilder, Chunk chunk, int x, int y, int z) {
         int worldX = x + chunk.getChunkX() * Chunk.CHUNK_SIZE;
@@ -93,7 +90,13 @@ public class GameMeshBuilder {
                     worldX, worldY + 1, worldZ,
                     0, 1, 0);
 
-            triangleMesh.addTriangle();
+            // Generate individual TriangleMeshes.
+            triangleMesh.addTriangle(new Vector3(worldX, worldY + 1, worldZ + 1),
+                new Vector3(worldX + 1, worldY + 1, worldZ + 1),
+                new Vector3(worldX + 1, worldY + 1, worldZ));
+            triangleMesh.addTriangle(new Vector3(worldX, worldY + 1, worldZ + 1),
+                new Vector3(worldX, worldY + 1, worldZ),
+                new Vector3(worldX + 1, worldY + 1, worldZ));
 
         }
         // Bottom face (y-)
@@ -104,6 +107,13 @@ public class GameMeshBuilder {
                     worldX + 1, worldY, worldZ + 1,
                     worldX, worldY, worldZ + 1,
                     0, -1, 0);
+
+            triangleMesh.addTriangle(new Vector3(worldX, worldY, worldZ),
+                new Vector3(worldX + 1, worldY, worldZ),
+                new Vector3(worldX, worldY, worldZ + 1));
+            triangleMesh.addTriangle(new Vector3(worldX + 1, worldY, worldZ + 1),
+                new Vector3(worldX + 1, worldY, worldZ),
+                new Vector3(worldX, worldY, worldZ + 1));
         }
 //         North face (z+)
         if (world.getBlock(worldX, worldY, worldZ + 1) == BlockType.AIR) {
@@ -113,6 +123,14 @@ public class GameMeshBuilder {
                     worldX + 1, worldY + 1, worldZ + 1,
                     worldX, worldY + 1, worldZ + 1,
                     0, 0, 1);
+
+            triangleMesh.addTriangle(new Vector3(worldX, worldY, worldZ + 1),
+                new Vector3(worldX + 1, worldY, worldZ + 1),
+                new Vector3(worldX, worldY + 1, worldZ + 1));
+            triangleMesh.addTriangle(new Vector3(worldX + 1, worldY + 1, worldZ + 1),
+                new Vector3(worldX + 1, worldY, worldZ + 1),
+                new Vector3(worldX, worldY + 1, worldZ + 1));
+
         }
         // South face (z-)
         if (world.getBlock(worldX, worldY, worldZ - 1) == BlockType.AIR) {
@@ -122,6 +140,14 @@ public class GameMeshBuilder {
                     worldX, worldY + 1, worldZ,
                     worldX + 1, worldY + 1, worldZ,
                     0, 0, -1);
+
+            triangleMesh.addTriangle(new Vector3(worldX, worldY, worldZ),
+                new Vector3(worldX + 1, worldY, worldZ ),
+                new Vector3(worldX, worldY + 1, worldZ));
+            triangleMesh.addTriangle(new Vector3(worldX + 1, worldY + 1, worldZ),
+                new Vector3(worldX + 1, worldY, worldZ),
+                new Vector3(worldX, worldY + 1, worldZ));
+
         }
         // East face (x+)
         if (world.getBlock(worldX + 1, worldY, worldZ) == BlockType.AIR) {
@@ -131,6 +157,14 @@ public class GameMeshBuilder {
                     worldX + 1, worldY + 1, worldZ,
                     worldX + 1, worldY + 1, worldZ + 1,
                     1, 0, 0);
+
+            triangleMesh.addTriangle(new Vector3(worldX + 1, worldY, worldZ + 1),
+                new Vector3(worldX + 1, worldY, worldZ ),
+                new Vector3(worldX + 1, worldY + 1, worldZ));
+            triangleMesh.addTriangle(new Vector3(worldX + 1, worldY + 1, worldZ + 1),
+                new Vector3(worldX + 1, worldY, worldZ),
+                new Vector3(worldX + 1, worldY + 1, worldZ));
+
         }
         // West face (x-)
         if (world.getBlock(worldX - 1, worldY, worldZ) == BlockType.AIR) {
@@ -140,7 +174,22 @@ public class GameMeshBuilder {
                     worldX, worldY + 1, worldZ + 1,
                     worldX, worldY + 1, worldZ,
                     -1, 0, 0);
+
+            triangleMesh.addTriangle(new Vector3(worldX, worldY, worldZ),
+                new Vector3(worldX, worldY, worldZ + 1),
+                new Vector3(worldX, worldY + 1, worldZ));
+            triangleMesh.addTriangle(new Vector3(worldX, worldY + 1, worldZ + 1),
+                new Vector3(worldX, worldY, worldZ + 1),
+                new Vector3(worldX, worldY + 1, worldZ));
         }
+    }
+
+    /**
+     * Takes all the triangleMesh faces built from Build to generate a BvhTriangleMeshShape and return it.
+     * @return btBvhTriangleMeshShape
+     */
+    public btBvhTriangleMeshShape buildTriangle(){
+        return new btBvhTriangleMeshShape(triangleMesh, true);
     }
 
 }

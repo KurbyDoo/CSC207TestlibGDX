@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -22,6 +24,8 @@ public class ObjectRenderer {
     public List<ModelInstance> models = new ArrayList<>();
 
     public BlockingQueue<ModelInstance> toAdd = new LinkedBlockingQueue<>();
+
+    public ArrayList<btCollisionShape> collisionBodies = new ArrayList<btCollisionShape>();
 
     public ObjectRenderer(PerspectiveCamera camera) {
         environment = new Environment();
@@ -44,6 +48,10 @@ public class ObjectRenderer {
         }
     }
 
+    public void collisionAssets(btCollisionShape body){
+        collisionBodies.add(body);
+    }
+
     public void render() {
         updateRenderList();
 
@@ -60,5 +68,8 @@ public class ObjectRenderer {
     public void dispose() {
         modelBatch.dispose();
         models.clear();
+        for (btCollisionShape e : collisionBodies){
+            e.dispose();
+        }
     }
 }
