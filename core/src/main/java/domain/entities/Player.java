@@ -12,7 +12,7 @@ public class Player {
     private final float rotationSpeed = 0.2f;
 
     private final Inventory inventory;
-    private int currSlot = 0;
+    private int currentSlot = 0;
 
     public Player(Vector3 startingPosition) {
         this.position = new Vector3(startingPosition);
@@ -71,17 +71,17 @@ public class Player {
         return inventory;
     }
 
-    public int getCurrSlot() {
-        return currSlot;
+    public int getCurrentSlot() {
+        return currentSlot;
     }
 
     /**
      * Set the current selected inventory slot.
      * @param index The index of the selected inventory slot.
      */
-    public void setCurrSlot(int index) {
+    public void setCurrentSlot(int index) {
         if (index >= 0 && index < inventory.getSize()) {
-            this.currSlot = index;
+            this.currentSlot = index;
         }
     }
 
@@ -99,6 +99,6 @@ public class Player {
      * Do nothing if slot is empty.
      */
     public void drop() {
-        inventory.removeItem(currSlot);
+        inventory.removeItem(currentSlot);
     }
 }
