@@ -8,9 +8,13 @@ import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.utils.ArrayMap;
 
 import java.util.ArrayList;
+
+import infrastructure.rendering.ChunkMeshData;
 import infrastructure.rendering.GameMeshBuilder;
 import infrastructure.rendering.ObjectRenderer;
 
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -39,10 +43,12 @@ public class ChunkLoader {
         try {
             Chunk chunk;
             for (int i = 0; i < BUFFER_SIZE && ((chunk = chunksToLoad.poll()) != null); i++) {
-                final ModelInstance model = meshBuilder.build(chunk);
-                btBvhTriangleMeshShape triMesh = meshBuilder.buildTriangle();
-                objectRenderer.add(model);
-                objectRenderer.collisionAssets(triMesh);
+
+                ChunkMeshData chunkMesh;
+                chunkMesh = meshBuilder.build(chunk);
+                objectRenderer.add(chunkMesh.getModel());
+//                objectRenderer.collisionAssets(chunkMesh.getBvhTriangle());
+                objectRenderer.addMeshData(chunkMesh);
             }
         } catch (Exception e) {
             e.printStackTrace();

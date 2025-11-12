@@ -1,5 +1,6 @@
 package infrastructure.rendering;
 
+import com.badlogic.gdx.graphics.g3d.Model;
 import domain.entities.BlockType;
 import domain.entities.Chunk;
 import domain.entities.World;
@@ -16,7 +17,6 @@ import com.badlogic.gdx.physics.bullet.collision.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class GameMeshBuilder {
     private final World world;
@@ -24,14 +24,13 @@ public class GameMeshBuilder {
         this.world = world;
     }
 
-    btTriangleMesh triangleMesh = new btTriangleMesh();
     ModelBuilder modelBuilder;
     ModelInstance modelInstance;
 
     public List<ModelInstance> build(World world) {
         List<ModelInstance> instances = new ArrayList<>();
         for (Chunk chunk : world.getChunks().values()) {
-            instances.add(build(chunk));
+            instances.add(build(chunk).getModel());
         }
         return instances;
     }
@@ -49,18 +48,24 @@ public class GameMeshBuilder {
         }
     }
 
-    public ModelInstance build(Chunk chunk) {
+    public ChunkMeshData build(Chunk chunk) {
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.begin();
+        btTriangleMesh triangleMesh = new btTriangleMesh();
+        buildType(chunk, triangleMesh, modelBuilder, BlockType.GRASS);
+        buildType(chunk, triangleMesh, modelBuilder, BlockType.DIRT);
+        buildType(chunk, triangleMesh,modelBuilder, BlockType.STONE);
+        btBvhTriangleMeshShape bvhTriangle = new btBvhTriangleMeshShape(triangleMesh, true);
 
-        buildType(chunk, modelBuilder, BlockType.GRASS);
-        buildType(chunk, modelBuilder, BlockType.DIRT);
-        buildType(chunk, modelBuilder, BlockType.STONE);
+        Model completeModel = modelBuilder.end();
 
-        return new ModelInstance(modelBuilder.end());
+        ChunkMeshData chunkMeshData = new ChunkMeshData(new ModelInstance(completeModel), triangleMesh, bvhTriangle);
+//        chunkMeshData.generateGameObject(completeModel, "bvhTriangle");
+
+        return chunkMeshData;
     }
 
-    private void buildType(Chunk chunk, ModelBuilder modelBuilder, BlockType type) {
+    private void buildType(Chunk chunk, btTriangleMesh triangleMesh, ModelBuilder modelBuilder, BlockType type) {
         Material material = getBlockMaterial(type);
         MeshPartBuilder meshBuilder = modelBuilder.part(type.toString(), GL20.GL_TRIANGLES, Usage.Position | Usage.Normal, material);
 
@@ -68,7 +73,7 @@ public class GameMeshBuilder {
             for (int y = 0; y < Chunk.CHUNK_SIZE; y++) {
                 for (int z = 0; z < Chunk.CHUNK_SIZE; z++) {
                     if (chunk.getBlock(x, y, z) == type) {
-                        buildBlockFaces(meshBuilder, chunk, x, y, z);
+                        buildBlockFaces(meshBuilder, triangleMesh, chunk, x, y, z);
                     }
                 }
             }
@@ -76,7 +81,7 @@ public class GameMeshBuilder {
     }
 
 
-    private void buildBlockFaces(MeshPartBuilder meshBuilder, Chunk chunk, int x, int y, int z) {
+    private void buildBlockFaces(MeshPartBuilder meshBuilder, btTriangleMesh triangleMesh, Chunk chunk, int x, int y, int z) {
         int worldX = x + chunk.getChunkX() * Chunk.CHUNK_SIZE;
         int worldY = y + chunk.getChunkY() * Chunk.CHUNK_SIZE;
         int worldZ = z + chunk.getChunkZ() * Chunk.CHUNK_SIZE;
@@ -188,8 +193,4 @@ public class GameMeshBuilder {
      * Takes all the triangleMesh faces built from Build to generate a BvhTriangleMeshShape and return it.
      * @return btBvhTriangleMeshShape
      */
-    public btBvhTriangleMeshShape buildTriangle(){
-        return new btBvhTriangleMeshShape(triangleMesh, true);
-    }
-
 }
