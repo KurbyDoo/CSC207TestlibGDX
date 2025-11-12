@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -25,7 +24,9 @@ public class ObjectRenderer {
 
     public BlockingQueue<ModelInstance> toAdd = new LinkedBlockingQueue<>();
 
-    public ArrayList<btCollisionShape> collisionBodies = new ArrayList<btCollisionShape>();
+    public List<btCollisionShape> collisionBodies = new ArrayList<btCollisionShape>();
+
+    public List<ChunkMeshData> meshData = new ArrayList<ChunkMeshData>();
 
     public ObjectRenderer(PerspectiveCamera camera) {
         environment = new Environment();
@@ -48,9 +49,9 @@ public class ObjectRenderer {
         }
     }
 
-    public void collisionAssets(btCollisionShape body){
-        collisionBodies.add(body);
-    }
+    public void collisionAssets(btCollisionShape body){collisionBodies.add(body);}
+
+    public void addMeshData(ChunkMeshData data){meshData.add(data);}
 
     public void render() {
         updateRenderList();
@@ -66,10 +67,14 @@ public class ObjectRenderer {
     }
 
     public void dispose() {
+        for (btCollisionShape shape : collisionBodies){shape.dispose();}
+//
+//        for(ChunkMeshData data : meshData){
+//            data.getTriangleMesh().dispose();
+//            data.getBvhTriangle().dispose();
+//        }
+
         modelBatch.dispose();
         models.clear();
-        for (btCollisionShape e : collisionBodies){
-            e.dispose();
-        }
     }
 }

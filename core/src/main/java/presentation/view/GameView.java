@@ -3,6 +3,7 @@ package presentation.view;
 import com.badlogic.gdx.physics.bullet.collision.*;
 import domain.entities.Player;
 import domain.entities.World;
+import infrastructure.rendering.ChunkMeshManager;
 import presentation.controllers.CameraController;
 import presentation.controllers.FirstPersonCameraController;
 import infrastructure.input_boundary.GameInputAdapter;
@@ -37,6 +38,7 @@ public class GameView implements Viewable {
     public btBroadphaseInterface broadPhase;
     public btCollisionWorld collisionWorld;
 
+    public ChunkMeshManager chunkMeshManager;
 
     private float accumulator;
 
@@ -46,10 +48,10 @@ public class GameView implements Viewable {
         // need to initialize before any BulletPhysics related calls
         Bullet.init();
         // initialize collisionWorld
-        collisionConfig = new btDefaultCollisionConfiguration();
-        dispatcher = new btCollisionDispatcher(collisionConfig);
-        broadPhase = new btDbvtBroadphase();
-        collisionWorld = new btCollisionWorld(dispatcher, broadPhase, collisionConfig);
+//        collisionConfig = new btDefaultCollisionConfiguration();
+//        dispatcher = new btCollisionDispatcher(collisionConfig);
+//        broadPhase = new btDbvtBroadphase();
+//        collisionWorld = new btCollisionWorld(dispatcher, broadPhase, collisionConfig);
 
         Vector3 startingPosition = new Vector3(0, 200f, 0);
         Vector3 startingPosition = new Vector3(0, 16f, 0);
@@ -70,6 +72,8 @@ public class GameView implements Viewable {
         meshBuilder = new GameMeshBuilder(world);
         chunkLoader = new ChunkLoader(meshBuilder, objectRenderer);
         chunkGenerationUseCase = new ChunkGenerationInteractor();
+
+        chunkMeshManager = new ChunkMeshManager();
 
         worldGenerationController = new WorldGenerationController(chunkGenerationUseCase, world, chunkLoader);
 
@@ -103,10 +107,13 @@ public class GameView implements Viewable {
     public void disposeView() {
         objectRenderer.dispose();
 
-        collisionWorld.dispose();
-        broadPhase.dispose();
-        dispatcher.dispose();
-        collisionConfig.dispose();
+        chunkMeshManager.dispose();
+
+//        collisionWorld.dispose();
+//        broadPhase.dispose();
+//        dispatcher.dispose();
+//        collisionConfig.dispose();
+
 
     }
 }
