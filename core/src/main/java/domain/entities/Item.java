@@ -4,29 +4,20 @@ import java.util.Objects;
 
 public class Item {
 
-    private final String id;
-    private final String displayName;
+    private final String name;
     private final boolean stackable;
 
-    public Item(String id, String displayName, boolean stackable) {
-        if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("Item ID must not be empty");
-        }
-        if (displayName == null || displayName.isEmpty()) {
-            throw new IllegalArgumentException("Display name must not be empty");
+    public Item(String name, boolean stackable) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name must not be empty");
         }
 
-        this.id = id;
-        this.displayName = displayName;
+        this.name = name;
         this.stackable = stackable;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getDisplayName() {
-        return displayName;
+    public String getName() {
+        return name;
     }
 
     public boolean isStackable() {
@@ -43,16 +34,16 @@ public class Item {
         if (this == o) return true;
         if (!(o instanceof Item)) return false;
         Item item = (Item) o;
-        return id.equals(item.id);
+        return name.equals(item.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(name);
     }
 
     @Override
     public String toString() {
-        return displayName + " (" + id + ")";
+        return name;
     }
 }
