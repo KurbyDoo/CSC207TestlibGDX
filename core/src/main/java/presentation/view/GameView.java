@@ -54,7 +54,7 @@ public class GameView implements Viewable {
         chunkLoader = new ChunkLoader(meshBuilder, objectRenderer);
         chunkGenerationUseCase = new ChunkGenerationInteractor();
 
-        worldGenerationController = new WorldGenerationController(chunkGenerationUseCase, world, chunkLoader);
+        worldGenerationController = new WorldGenerationController(chunkGenerationUseCase, world, chunkLoader, objectRenderer);
 
         worldGenerationController.generateInitialWorld(8, 4, 32);
     }
