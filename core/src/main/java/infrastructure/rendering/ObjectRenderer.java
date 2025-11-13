@@ -8,6 +8,12 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
+import com.badlogic.gdx.math.Vector3;
+import net.mgsx.gltf.loaders.gltf.GLTFLoader;
+import net.mgsx.gltf.scene3d.scene.Scene;
+import net.mgsx.gltf.scene3d.scene.SceneAsset;
+import net.mgsx.gltf.scene3d.scene.SceneManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +27,13 @@ public class ObjectRenderer {
     public ModelBatch modelBatch;
     public List<ModelInstance> models = new ArrayList<>();
 
+    // testing with a zombie instance
+    public ModelInstance zombieInstance;
+    // add scene attributes (to load models)
+    private SceneManager sceneManager;
+    private SceneAsset sceneAsset;
+    private Scene scene;
+
     public BlockingQueue<ModelInstance> toAdd = new LinkedBlockingQueue<>();
 
     public ObjectRenderer(PerspectiveCamera camera) {
@@ -31,11 +44,29 @@ public class ObjectRenderer {
         modelBatch = new ModelBatch();
 
         this.camera = camera;
+
+        //set up scene
+        sceneAsset = new GLTFLoader().load(Gdx.files.internal("models/model.gltf"));
+        scene = new Scene(sceneAsset.scene);
+        sceneManager = new SceneManager();
+        sceneManager.setShaderProvider(new DefaultShaderProvider());
+        sceneManager.addScene(scene);
+        sceneManager.setCamera(camera);
+        sceneManager.setAmbientLight(1f);
     }
 
     public void add(ModelInstance modelInstance) {
         toAdd.add(modelInstance);
     }
+
+    public void addZombieInstance(ModelInstance zombieInstance) {
+        this.zombieInstance = zombieInstance;
+    }
+
+//    public void addZombieToScene(SceneAsset sceneAsset) {
+//        scene = new Scene(sceneAsset.scene);
+//        sceneManager.addScene(scene);
+//    }
 
     private void updateRenderList() {
         ModelInstance instance;
@@ -44,21 +75,42 @@ public class ObjectRenderer {
         }
     }
 
-    public void render() {
+    public void render(Float deltaTime, Vector3 playerPos) {
         updateRenderList();
 
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+        // Move zombie
+        //zombieInstance.transform.translate(deltaTime*2, 0f, 0f);
+        if (zombieInstance != null) {
+            Vector3 zombiePos = zombieInstance.transform.getTranslation(new Vector3());
+            Vector3 direction = new Vector3(playerPos).sub(zombiePos).nor();
+            float speed = 2f;
+            zombiePos.add(direction.scl(deltaTime * speed));
+            zombieInstance.transform.setTranslation(zombiePos);
+        }
+
+        // move zombie model
+        scene.modelInstance.transform.setToTranslation(0, 14f, 0f);
+        sceneManager.update(deltaTime);
+        sceneManager.render();
+
         modelBatch.begin(camera);
+
         for (ModelInstance modelInstance : models) {
             modelBatch.render(modelInstance, environment);
         }
+        //render zombie
+        modelBatch.render(zombieInstance, environment);
+
         modelBatch.end();
     }
 
     public void dispose() {
         modelBatch.dispose();
         models.clear();
+        sceneManager.dispose();
+        sceneAsset.dispose();
     }
 }

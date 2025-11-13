@@ -2,6 +2,7 @@ package presentation.view;
 
 import domain.entities.Player;
 import domain.entities.World;
+import domain.entities.Zombie; // delete this later
 import presentation.controllers.CameraController;
 import presentation.controllers.FirstPersonCameraController;
 import infrastructure.input_boundary.GameInputAdapter;
@@ -56,6 +57,10 @@ public class GameView implements Viewable {
         worldGenerationController = new WorldGenerationController(chunkGenerationUseCase, world, chunkLoader);
 
         worldGenerationController.generateInitialWorld(8, 4, 32);
+
+        //test add entities
+        Zombie zombie = new Zombie(objectRenderer);
+        zombie.createZombie(); //delete this later
     }
 
     @Override
@@ -69,6 +74,9 @@ public class GameView implements Viewable {
 
             // WORLD UPDATES
             gameInputAdapter.processInput(deltaTime);
+
+            // Call entity controller and pass world and entity list
+
         }
 
         // BACKGROUND PROCESSING
@@ -78,7 +86,7 @@ public class GameView implements Viewable {
 
         // RENDER UPDATES
         cameraController.renderCamera(alpha);
-        objectRenderer.render();
+        objectRenderer.render(deltaTime, player.getPosition());
     }
 
     @Override
