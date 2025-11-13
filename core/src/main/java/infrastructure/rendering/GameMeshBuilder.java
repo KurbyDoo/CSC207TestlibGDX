@@ -19,7 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameMeshBuilder {
+    private final Vector3 p1 = new Vector3();
+    private final Vector3 p2 = new Vector3();
+    private final Vector3 p3 = new Vector3();
     private final World world;
+
     public GameMeshBuilder(World world) {
         this.world = world;
     }
@@ -27,13 +31,14 @@ public class GameMeshBuilder {
     ModelBuilder modelBuilder;
     ModelInstance modelInstance;
 
-    public List<ModelInstance> build(World world) {
-        List<ModelInstance> instances = new ArrayList<>();
-        for (Chunk chunk : world.getChunks().values()) {
-            instances.add(build(chunk).getModel());
-        }
-        return instances;
-    }
+//    public List<ModelInstance> build(World world) {
+//        List<ModelInstance> instances = new ArrayList<>();
+//        for (Chunk chunk : world.getChunks().values()) {
+//            instances.add(build(chunk).getModel());
+//            instances.add(build(chunk));
+//        }
+//        return instances;
+//    }
 
     private Material getBlockMaterial(BlockType blockType) {
         switch (blockType) {
@@ -54,12 +59,18 @@ public class GameMeshBuilder {
         btTriangleMesh triangleMesh = new btTriangleMesh();
         buildType(chunk, triangleMesh, modelBuilder, BlockType.GRASS);
         buildType(chunk, triangleMesh, modelBuilder, BlockType.DIRT);
-        buildType(chunk, triangleMesh,modelBuilder, BlockType.STONE);
-        btBvhTriangleMeshShape bvhTriangle = new btBvhTriangleMeshShape(triangleMesh, true);
+        buildType(chunk, triangleMesh, modelBuilder, BlockType.STONE);
+
+        btBvhTriangleMeshShape bvhTriangle = null;
+
+        // THIS CRASHES IF YOU PASS AN EMPTY MESH
+        if (triangleMesh.getNumTriangles() != 0) {
+            bvhTriangle = new btBvhTriangleMeshShape(triangleMesh, true);
+        }
 
         Model completeModel = modelBuilder.end();
 
-        ChunkMeshData chunkMeshData = new ChunkMeshData(new ModelInstance(completeModel), triangleMesh, bvhTriangle);
+        ChunkMeshData chunkMeshData = new ChunkMeshData(completeModel, triangleMesh, bvhTriangle);
 //        chunkMeshData.generateGameObject(completeModel, "bvhTriangle");
 
         return chunkMeshData;
@@ -86,6 +97,7 @@ public class GameMeshBuilder {
         int worldY = y + chunk.getChunkY() * Chunk.CHUNK_SIZE;
         int worldZ = z + chunk.getChunkZ() * Chunk.CHUNK_SIZE;
 
+        boolean removeDuplicateVertices = false;
         // Top face (y+)
         if (world.getBlock(worldX, worldY + 1, worldZ) == BlockType.AIR) {
             meshBuilder
@@ -96,12 +108,16 @@ public class GameMeshBuilder {
                     0, 1, 0);
 
             // Generate individual TriangleMeshes.
-            triangleMesh.addTriangle(new Vector3(worldX, worldY + 1, worldZ + 1),
-                new Vector3(worldX + 1, worldY + 1, worldZ + 1),
-                new Vector3(worldX + 1, worldY + 1, worldZ));
-            triangleMesh.addTriangle(new Vector3(worldX, worldY + 1, worldZ + 1),
-                new Vector3(worldX, worldY + 1, worldZ),
-                new Vector3(worldX + 1, worldY + 1, worldZ));
+            triangleMesh.addTriangle(
+                p1.set(x, y + 1, z + 1),
+                p2.set(x + 1, y + 1, z + 1),
+                p3.set(x + 1, y + 1, z),
+                removeDuplicateVertices);
+            triangleMesh.addTriangle(
+                p1.set(x, y + 1, z + 1),
+                p2.set(x + 1, y + 1, z),
+                p3.set(x, y + 1, z),
+                removeDuplicateVertices);
 
         }
         // Bottom face (y-)
@@ -113,12 +129,16 @@ public class GameMeshBuilder {
                     worldX, worldY, worldZ + 1,
                     0, -1, 0);
 
-            triangleMesh.addTriangle(new Vector3(worldX, worldY, worldZ),
-                new Vector3(worldX + 1, worldY, worldZ),
-                new Vector3(worldX, worldY, worldZ + 1));
-            triangleMesh.addTriangle(new Vector3(worldX + 1, worldY, worldZ + 1),
-                new Vector3(worldX + 1, worldY, worldZ),
-                new Vector3(worldX, worldY, worldZ + 1));
+            triangleMesh.addTriangle(
+                p1.set(x, y, z),
+                p2.set(x + 1, y, z),
+                p3.set(x + 1, y, z + 1),
+                removeDuplicateVertices);
+            triangleMesh.addTriangle(
+                p1.set(x, y, z),
+                p2.set(x + 1, y, z + 1),
+                p3.set(x, y, z + 1),
+                removeDuplicateVertices);
         }
 //         North face (z+)
         if (world.getBlock(worldX, worldY, worldZ + 1) == BlockType.AIR) {
@@ -129,12 +149,18 @@ public class GameMeshBuilder {
                     worldX, worldY + 1, worldZ + 1,
                     0, 0, 1);
 
-            triangleMesh.addTriangle(new Vector3(worldX, worldY, worldZ + 1),
-                new Vector3(worldX + 1, worldY, worldZ + 1),
-                new Vector3(worldX, worldY + 1, worldZ + 1));
-            triangleMesh.addTriangle(new Vector3(worldX + 1, worldY + 1, worldZ + 1),
-                new Vector3(worldX + 1, worldY, worldZ + 1),
-                new Vector3(worldX, worldY + 1, worldZ + 1));
+            triangleMesh.addTriangle(
+                p1.set(x, y, z + 1),
+                p2.set(x + 1, y, z + 1),
+                p3.set(x + 1, y + 1, z + 1),
+                removeDuplicateVertices
+            );
+            triangleMesh.addTriangle(
+                p1.set(x, y, z + 1),
+                p2.set(x + 1, y + 1, z + 1),
+                p3.set(x, y + 1, z + 1),
+                removeDuplicateVertices
+            );
 
         }
         // South face (z-)
@@ -146,12 +172,18 @@ public class GameMeshBuilder {
                     worldX + 1, worldY + 1, worldZ,
                     0, 0, -1);
 
-            triangleMesh.addTriangle(new Vector3(worldX, worldY, worldZ),
-                new Vector3(worldX + 1, worldY, worldZ ),
-                new Vector3(worldX, worldY + 1, worldZ));
-            triangleMesh.addTriangle(new Vector3(worldX + 1, worldY + 1, worldZ),
-                new Vector3(worldX + 1, worldY, worldZ),
-                new Vector3(worldX, worldY + 1, worldZ));
+            triangleMesh.addTriangle(
+                p1.set(x + 1, y, z),
+                p2.set(x, y, z),
+                p3.set(x, y + 1, z),
+                removeDuplicateVertices
+            );
+            triangleMesh.addTriangle(
+                p1.set(x + 1, y, z),
+                p2.set(x, y + 1, z),
+                p3.set(x + 1, y + 1, z),
+                removeDuplicateVertices
+            );
 
         }
         // East face (x+)
@@ -163,13 +195,18 @@ public class GameMeshBuilder {
                     worldX + 1, worldY + 1, worldZ + 1,
                     1, 0, 0);
 
-            triangleMesh.addTriangle(new Vector3(worldX + 1, worldY, worldZ + 1),
-                new Vector3(worldX + 1, worldY, worldZ ),
-                new Vector3(worldX + 1, worldY + 1, worldZ));
-            triangleMesh.addTriangle(new Vector3(worldX + 1, worldY + 1, worldZ + 1),
-                new Vector3(worldX + 1, worldY, worldZ),
-                new Vector3(worldX + 1, worldY + 1, worldZ));
-
+            triangleMesh.addTriangle(
+                p1.set(x + 1, y, z + 1),
+                p2.set(x + 1, y, z),
+                p3.set(x + 1, y + 1, z),
+                removeDuplicateVertices
+            );
+            triangleMesh.addTriangle(
+                p1.set(x + 1, y, z + 1),
+                p2.set(x + 1, y + 1, z),
+                p3.set(x + 1, y + 1, z + 1),
+                removeDuplicateVertices
+            );
         }
         // West face (x-)
         if (world.getBlock(worldX - 1, worldY, worldZ) == BlockType.AIR) {
@@ -180,12 +217,18 @@ public class GameMeshBuilder {
                     worldX, worldY + 1, worldZ,
                     -1, 0, 0);
 
-            triangleMesh.addTriangle(new Vector3(worldX, worldY, worldZ),
-                new Vector3(worldX, worldY, worldZ + 1),
-                new Vector3(worldX, worldY + 1, worldZ));
-            triangleMesh.addTriangle(new Vector3(worldX, worldY + 1, worldZ + 1),
-                new Vector3(worldX, worldY, worldZ + 1),
-                new Vector3(worldX, worldY + 1, worldZ));
+            triangleMesh.addTriangle(
+                p1.set(x, y, z),
+                p2.set(x, y, z + 1),
+                p3.set(x, y + 1, z + 1),
+                removeDuplicateVertices
+            );
+            triangleMesh.addTriangle(
+                p1.set(x, y, z),
+                p2.set(x, y + 1, z + 1),
+                p3.set(x, y + 1, z),
+                removeDuplicateVertices
+            );
         }
     }
 

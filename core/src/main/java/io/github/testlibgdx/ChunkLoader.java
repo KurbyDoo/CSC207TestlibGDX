@@ -47,7 +47,8 @@ public class ChunkLoader {
                 ChunkMeshData chunkMesh;
                 chunkMesh = meshBuilder.build(chunk);
                 objectRenderer.add(chunkMesh.getModel());
-//                objectRenderer.collisionAssets(chunkMesh.getBvhTriangle());
+//                objectRenderer.add(meshBuilder.build(chunk));
+                objectRenderer.collisionAssets(chunkMesh.getBvhTriangle());
                 objectRenderer.addMeshData(chunkMesh);
             }
         } catch (Exception e) {
