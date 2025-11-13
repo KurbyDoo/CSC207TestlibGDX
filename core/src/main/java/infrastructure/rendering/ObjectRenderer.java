@@ -31,8 +31,8 @@ public class ObjectRenderer {
     public ModelInstance zombieInstance;
     // add scene attributes (to load models)
     private SceneManager sceneManager;
-    private SceneAsset sceneAsset;
-    private Scene scene;
+//    private SceneAsset sceneAsset;
+//    private Scene scene;
 
     public BlockingQueue<ModelInstance> toAdd = new LinkedBlockingQueue<>();
 
@@ -46,11 +46,11 @@ public class ObjectRenderer {
         this.camera = camera;
 
         //set up scene
-        sceneAsset = new GLTFLoader().load(Gdx.files.internal("models/model.gltf"));
-        scene = new Scene(sceneAsset.scene);
+//        sceneAsset = new GLTFLoader().load(Gdx.files.internal("models/model.gltf"));
+//        scene = new Scene(sceneAsset.scene);
         sceneManager = new SceneManager();
         sceneManager.setShaderProvider(new DefaultShaderProvider());
-        sceneManager.addScene(scene);
+//        sceneManager.addScene(scene);
         sceneManager.setCamera(camera);
         sceneManager.setAmbientLight(1f);
     }
@@ -63,10 +63,10 @@ public class ObjectRenderer {
         this.zombieInstance = zombieInstance;
     }
 
-//    public void addZombieToScene(SceneAsset sceneAsset) {
-//        scene = new Scene(sceneAsset.scene);
-//        sceneManager.addScene(scene);
-//    }
+    public void addZombieToScene(Scene scene) {
+        System.out.println("Zombie added to scene.");
+        sceneManager.addScene(scene);
+    }
 
     private void updateRenderList() {
         ModelInstance instance;
@@ -91,8 +91,13 @@ public class ObjectRenderer {
             zombieInstance.transform.setTranslation(zombiePos);
         }
 
-        // move zombie model
-        scene.modelInstance.transform.setToTranslation(0, 14f, 0f);
+        // render zombie model
+//        Vector3 zombiePos = scene.modelInstance.transform.getTranslation(new Vector3());
+//        Vector3 direction = new Vector3(playerPos).sub(zombiePos).nor();
+//        float speed = 2f;
+//        zombiePos.add(direction.scl(deltaTime * speed));
+//        scene.modelInstance.transform.setTranslation(zombiePos);
+//        //scene.modelInstance.transform.setToTranslation(0, 14f, 0f);
         sceneManager.update(deltaTime);
         sceneManager.render();
 
@@ -102,7 +107,7 @@ public class ObjectRenderer {
             modelBatch.render(modelInstance, environment);
         }
         //render zombie
-        modelBatch.render(zombieInstance, environment);
+        //modelBatch.render(zombieInstance, environment);
 
         modelBatch.end();
     }
@@ -111,6 +116,6 @@ public class ObjectRenderer {
         modelBatch.dispose();
         models.clear();
         sceneManager.dispose();
-        sceneAsset.dispose();
+//        sceneAsset.dispose();
     }
 }

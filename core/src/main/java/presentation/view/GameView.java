@@ -1,9 +1,12 @@
 package presentation.view;
 
+import application.use_cases.EntityGeneration.EntityGenerationInputData;
+import application.use_cases.EntityGeneration.EntityGenerationInteractor;
 import domain.entities.Player;
 import domain.entities.World;
 import domain.entities.Zombie; // delete this later
 import presentation.controllers.CameraController;
+import presentation.controllers.EntityController;
 import presentation.controllers.FirstPersonCameraController;
 import infrastructure.input_boundary.GameInputAdapter;
 import application.use_cases.ChunkGeneration.ChunkGenerationInteractor;
@@ -33,6 +36,10 @@ public class GameView implements Viewable {
 
     private float accumulator;
 
+    // add EntityController
+    private EntityController entityController;
+    private EntityGenerationInteractor entityGenerationInteractor;
+
     @Override
     public void createView() {
         Vector3 startingPosition = new Vector3(0, 16f, 0);
@@ -61,6 +68,10 @@ public class GameView implements Viewable {
         //test add entities
         Zombie zombie = new Zombie(objectRenderer);
         zombie.createZombie(); //delete this later
+        entityController = new EntityController(player);
+        entityGenerationInteractor = new EntityGenerationInteractor(objectRenderer);
+        entityGenerationInteractor.execute(new EntityGenerationInputData());
+
     }
 
     @Override

@@ -31,7 +31,7 @@ public class Zombie {
             VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
         ModelInstance zombieInstance = new ModelInstance(zombieModel);
         zombieInstance.transform.setToTranslation(0f, 14f, 0f);
-        objectRenderer.addZombieInstance(zombieInstance);
+        //objectRenderer.addZombieInstance(zombieInstance);
     }
 
     public void renderZombie() {
