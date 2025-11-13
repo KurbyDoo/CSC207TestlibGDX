@@ -23,6 +23,12 @@ allprojects {
       testOutputDir file('build/classes/java/test')
     }
   }
+  repositories {
+    maven { url 'https://jitpack.io' }
+  }
+  ext {
+    gltfVersion = '-SNAPSHOT'
+  }
 }
 
 configure(subprojects) {
