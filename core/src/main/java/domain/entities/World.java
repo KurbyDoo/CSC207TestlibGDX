@@ -38,4 +38,12 @@ public class World {
             return BlockType.STONE;
         }
     }
+
+    public Vector3 getPlayerChunk(Vector3 playerPosition) {
+        int chunkX = (int) Math.floor(playerPosition.x / Chunk.CHUNK_SIZE);
+        int chunkY = (int) Math.floor(playerPosition.y / Chunk.CHUNK_SIZE);
+        int chunkZ = (int) Math.floor(playerPosition.z / Chunk.CHUNK_SIZE);
+        return new Vector3(chunkX, chunkY, chunkZ);
+    }
+
 }

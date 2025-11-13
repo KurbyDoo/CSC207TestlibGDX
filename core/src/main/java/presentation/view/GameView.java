@@ -32,6 +32,7 @@ public class GameView implements Viewable {
 
     private float accumulator;
 
+
     @Override
     public void createView() {
         Vector3 startingPosition = new Vector3(0, 16f, 0);
@@ -84,5 +85,25 @@ public class GameView implements Viewable {
     @Override
     public void disposeView() {
         objectRenderer.dispose();
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public ObjectRenderer getObjectRenderer() {
+        return objectRenderer;
+    }
+
+    public ChunkLoader getChunkLoader() {
+        return chunkLoader;
+    }
+
+    public WorldGenerationController getWorldGenerationController() {
+        return worldGenerationController;
     }
 }
