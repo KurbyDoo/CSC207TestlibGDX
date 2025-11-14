@@ -19,7 +19,7 @@ public class WorldGenerationController {
     private ChunkLoader chunkLoader;
     private final int RENDER_DISTANCE = 16; // distance in chunks
     private final Set<Vector3> loadedChunks = new HashSet<>();
-    private Vector3 lastPlayerChunk = new Vector3();
+    private Vector3 lastPlayerChunk = null;
     private final ObjectRenderer objectRenderer;
 
 
@@ -50,35 +50,79 @@ public class WorldGenerationController {
         chunkLoader.addChunkToLoad(newChunk);
     }
 
-
     public void updateChunksAroundPlayer(Vector3 playerPosition) {
-        Vector3 playerChunk = world.getPlayerChunk(playerPosition);
 
-        // Create a safe copy of current chunk keys to avoid modifying while iterating
-        List<Vector3> existingChunks = new ArrayList<>(world.getChunks().keySet());
+        Vector3 currentChunk = world.getPlayerChunk(playerPosition);
 
-        // ---- 1. Hide chunks that are too far ----
-        for (Vector3 chunkPos : existingChunks) {
-            if (chunkPos.dst(playerChunk) > RENDER_DISTANCE) {
-                objectRenderer.hideChunk(chunkPos);
+        // First frame → just store chunk, don’t load anything yet
+        if (lastPlayerChunk == null) {
+            lastPlayerChunk = new Vector3(currentChunk);
+            return;
+        }
+
+        // If player is still in same chunk → nothing to do, FAST
+        if (currentChunk.epsilonEquals(lastPlayerChunk, 0.001f)) {
+            return;
+        }
+
+        // Player moved → determine which direction
+        int dx = (int)(currentChunk.x - lastPlayerChunk.x);
+        int dy = (int)(currentChunk.y - lastPlayerChunk.y);
+        int dz = (int)(currentChunk.z - lastPlayerChunk.z);
+
+        // Load only the new boundary depending on movement
+        if (dx != 0) loadChunksInDirection(currentChunk, dx, 0, 0);
+        if (dy != 0) loadChunksInDirection(currentChunk, 0, dy, 0);
+        if (dz != 0) loadChunksInDirection(currentChunk, 0, 0, dz);
+
+        lastPlayerChunk.set(currentChunk);
+    }
+
+    private void loadChunksInDirection(Vector3 playerChunk, int dx, int dy, int dz) {
+
+        int R = RENDER_DISTANCE;
+
+        // We load ONLY the boundary row/column the player moved into
+        int startX = (int)playerChunk.x - R;
+        int endX   = (int)playerChunk.x + R;
+        int startY = (int)playerChunk.y - 1;
+        int endY   = (int)playerChunk.y + 1;
+        int startZ = (int)playerChunk.z - R;
+        int endZ   = (int)playerChunk.z + R;
+
+        if (dx != 0) {
+            int boundaryX = dx > 0 ? endX : startX;
+            for (int y = startY; y <= endY; y++) {
+                for (int z = startZ; z <= endZ; z++) {
+                    tryGenerate(boundaryX, y, z);
+                }
             }
         }
 
-        // ---- 2. Show or generate nearby chunks ----
-        for (int x = (int) playerChunk.x - RENDER_DISTANCE; x <= (int) playerChunk.x + RENDER_DISTANCE; x++) {
-            for (int y = (int) playerChunk.y - 1; y <= (int) playerChunk.y + 1; y++) {
-                for (int z = (int) playerChunk.z - RENDER_DISTANCE; z <= (int) playerChunk.z + RENDER_DISTANCE; z++) {
-                    Vector3 chunkPos = new Vector3(x, y, z);
+        if (dy != 0) {
+            int boundaryY = dy > 0 ? endY : startY;
+            for (int x = startX; x <= endX; x++) {
+                for (int z = startZ; z <= endZ; z++) {
+                    tryGenerate(x, boundaryY, z);
+                }
+            }
+        }
 
-                    // If chunk already exists, just unhide it
-                    if (world.getChunks().containsKey(chunkPos)) {
-                        objectRenderer.showChunk(chunkPos);
-                    } else {
-                        // Otherwise, generate it once
-                        generateAndLoadChunk(x, y, z);
-                    }
+        if (dz != 0) {
+            int boundaryZ = dz > 0 ? endZ : startZ;
+            for (int x = startX; x <= endX; x++) {
+                for (int y = startY; y <= endY; y++) {
+                    tryGenerate(x, y, boundaryZ);
                 }
             }
         }
     }
+
+    private void tryGenerate(int x, int y, int z) {
+        Vector3 key = new Vector3(x, y, z);
+        if (!world.getChunks().containsKey(key)) {
+            generateAndLoadChunk(x, y, z);
+        }
+    }
+
 }
