@@ -1,4 +1,5 @@
 package UseCases.Login;
 
-public class LoginDataAccessInterface {
+public interface LoginDataAccessInterface {
+    boolean login(String email, String password);
 }
