@@ -16,8 +16,10 @@ public class LoginInteractor implements LoginInputBoundary {
         }
         boolean success_login  = userDataAccess.login(email, password);
         if (success_login){
-
+            LoginOutputData data = new LoginOutputData(email);
+            presenter.loginSuccess(data);
+        }else{
+            presenter.loginFailed("Incorrect email or password");
         }
     }
-
 }
