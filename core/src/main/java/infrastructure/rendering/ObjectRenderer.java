@@ -82,31 +82,4 @@ public class ObjectRenderer {
             return distance > renderDistance;
         });
     }
-
-    public void hideChunk(Vector3 chunkPos) {
-        for (ModelInstance instance : models) {
-            if (instance.userData instanceof Vector3) {
-                Vector3 pos = (Vector3) instance.userData;
-                if (pos.epsilonEquals(chunkPos, 0.1f)) {
-                    instance.transform.setTranslation(0, -9999, 0); // hide underground
-                }
-            }
-        }
-    }
-
-    public void showChunk(Vector3 chunkPos) {
-        for (ModelInstance instance : models) {
-            if (instance.userData instanceof Vector3) {
-                Vector3 pos = (Vector3) instance.userData; // Manual cast for Java 8
-                if (pos.epsilonEquals(chunkPos, 0.1f)) {
-                    // Move it back to its actual chunk position
-                    instance.transform.setTranslation(
-                        pos.x * Chunk.CHUNK_SIZE,
-                        pos.y * Chunk.CHUNK_SIZE,
-                        pos.z * Chunk.CHUNK_SIZE
-                    );
-                }
-            }
-        }
-    }
 }
