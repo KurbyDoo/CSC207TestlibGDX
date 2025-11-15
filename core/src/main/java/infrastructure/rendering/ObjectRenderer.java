@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.math.Vector3;
+import domain.entities.Chunk;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,5 +63,23 @@ public class ObjectRenderer {
     public void dispose() {
         modelBatch.dispose();
         models.clear();
+    }
+
+    public void removeChunksFarFrom(Vector3 playerChunk, int renderDistance) {
+        models.removeIf(instance -> {
+            Vector3 pos = instance.transform.getTranslation(new Vector3());
+
+            int chunkX = (int) Math.floor(pos.x / Chunk.CHUNK_SIZE);
+            int chunkY = (int) Math.floor(pos.y / Chunk.CHUNK_SIZE);
+            int chunkZ = (int) Math.floor(pos.z / Chunk.CHUNK_SIZE);
+
+            // Compare distance without creating extra Vector3 object
+            int dx = chunkX - (int)playerChunk.x;
+            int dy = chunkY - (int)playerChunk.y;
+            int dz = chunkZ - (int)playerChunk.z;
+
+            double distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
+            return distance > renderDistance;
+        });
     }
 }
