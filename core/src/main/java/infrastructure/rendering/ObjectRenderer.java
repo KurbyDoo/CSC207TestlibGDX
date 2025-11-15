@@ -73,10 +73,7 @@ public class ObjectRenderer {
     }
 
     public void dispose() {
-        // No need to dispose, ChunkMeshData stores the same objects
-//        for (btCollisionShape shape : collisionBodies) {
-//            shape.dispose();
-//        }
+
         for(ChunkMeshData data : meshData){
             data.dispose();
         }
