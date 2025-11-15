@@ -1,20 +1,14 @@
 package io.github.testlibgdx;
 
-import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import domain.entities.Chunk;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
-import com.badlogic.gdx.utils.ArrayMap;
 
 import java.util.ArrayList;
 
 import infrastructure.rendering.ChunkMeshData;
 import infrastructure.rendering.GameMeshBuilder;
 import infrastructure.rendering.ObjectRenderer;
+import physics.GameObject;
 
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 

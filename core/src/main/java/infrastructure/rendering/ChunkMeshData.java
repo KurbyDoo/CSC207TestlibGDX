@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.physics.bullet.collision.btBvhTriangleMeshShape;
 import com.badlogic.gdx.physics.bullet.collision.btTriangleMesh;
-import io.github.testlibgdx.GameObject;
 
 public class ChunkMeshData {
     final private Model model;
@@ -25,12 +24,6 @@ public class ChunkMeshData {
         this.triangle = triangle;
         this.shape = shape;
     }
-
-//    public void generateGameObject(Model model, String node){
-//        this.gameObject = new GameObject(model, node, this.shape);
-//    }
-
-//    public GameObject getGameObject(){return this.gameObject;}
 
     /**
      * WE MUST DISPOSE WHEN DE-RENDERING UNLOADING A CHUNK

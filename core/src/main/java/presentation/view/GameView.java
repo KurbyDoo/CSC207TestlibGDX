@@ -45,8 +45,6 @@ public class GameView implements Viewable {
     @Override
     public void createView() {
 
-        // need to initialize before any BulletPhysics related calls
-//        Bullet.init();
         // initialize collisionWorld
 //        collisionConfig = new btDefaultCollisionConfiguration();
 //        dispatcher = new btCollisionDispatcher(collisionConfig);
